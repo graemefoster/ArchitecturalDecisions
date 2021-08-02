@@ -1,0 +1,44 @@
+﻿@model ArchitectureDecisionsWeb.Features.Home.ViewModel;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Decisions</h1>
+    @if (Model.Problems.Count == 0)
+    {
+        <p>No architecture decisions have been entered.</p>
+    }
+    else
+    {
+        <p>
+            <table>
+                <thead>
+                <tr>
+                    <td></td>
+                    <td>Problem Name</td>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var decision in Model.Problems)
+                {
+                    <tr>
+                        <td><a asp-controller="EditDecision" asp-action="Execute" asp-route-id="@decision.Id">Edit</a></td>
+                        <td>@decision.DisplayName</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </p>
+    }
+</div>
+<div>
+    <ul>
+        <li>
+            <form asp-controller="NewDecision" asp-action="Execute">
+                <button>New decision</button>
+            </form>
+        </li>
+    </ul>
+    
+</div>
