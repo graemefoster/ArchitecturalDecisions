@@ -19,7 +19,7 @@ namespace ArchitectureDecisionsWeb.Features.EditDecision
         {
             var decision = await _repository.Get(id);
             
-            return View(new EditDecisionViewModel()
+            return View(new ViewModel()
             {
                 Decision = decision
             });

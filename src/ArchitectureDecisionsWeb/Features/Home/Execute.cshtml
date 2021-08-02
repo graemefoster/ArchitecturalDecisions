@@ -4,7 +4,19 @@
 }
 
 <div class="text-center">
+    
     <h1 class="display-4">Decisions</h1>
+
+    <hr/>
+
+    <div>
+        <ul class="list-inline">
+            <li class="list-inline-item">
+            </li>
+        </ul>
+
+    </div>
+
     @if (Model.Problems.Count == 0)
     {
         <p>No architecture decisions have been entered.</p>
@@ -12,7 +24,7 @@
     else
     {
         <p>
-            <table>
+            <table class="table table-bordered">
                 <thead>
                 <tr>
                     <td></td>
@@ -31,14 +43,4 @@
             </table>
         </p>
     }
-</div>
-<div>
-    <ul>
-        <li>
-            <form asp-controller="NewDecision" asp-action="Execute">
-                <button>New decision</button>
-            </form>
-        </li>
-    </ul>
-    
 </div>

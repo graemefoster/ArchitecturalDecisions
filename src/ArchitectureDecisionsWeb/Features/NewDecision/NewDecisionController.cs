@@ -20,7 +20,7 @@ namespace ArchitectureDecisionsWeb.Features.NewDecision
             await _decisionRepository.Save(newDecision);
             return new RedirectToActionResult("Execute", "EditDecision", new
             {
-                decisionId = newDecision.Id
+                id = newDecision.Id
             });
         }
     }

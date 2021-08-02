@@ -2,7 +2,7 @@
 
 namespace ArchitectureDecisionsWeb.Features.EditDecision
 {
-    public class EditDecisionViewModel
+    public class ViewModel
     {
         public Decision Decision { get; set; } = null!;
     }
