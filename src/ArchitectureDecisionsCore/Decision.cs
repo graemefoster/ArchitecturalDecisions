@@ -13,7 +13,7 @@ namespace ArchitectureDecisionsCore
         public List<Criteria> SolutionCriteria { get; set; } = new List<Criteria>();
         public List<Option> Options { get; set; } = new List<Option>();
         public Dictionary<Criteria, Comparison> Comparison { get; set; } = new Dictionary<Criteria, Comparison>();
-        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
-        public DateTimeOffset ModifiedAt { get; set; } = DateTimeOffset.Now;
+        public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.Now;
+        public DateTimeOffset UpdatedDate { get; set; } = DateTimeOffset.Now;
     }
 }

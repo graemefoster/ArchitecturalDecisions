@@ -47,5 +47,12 @@ namespace ArchitectureDecisionsCore
         {
             return FetchDecision(Path.Combine(_directory, decisionId + ".json"));
         }
+
+        public Task Delete(Guid decisionId)
+        {
+            var path = Path.Combine(_directory, decisionId + ".json");
+            File.Delete(path);
+            return Task.CompletedTask;
+        }
     }
 }

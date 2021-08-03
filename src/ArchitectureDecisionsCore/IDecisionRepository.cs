@@ -10,5 +10,6 @@ namespace ArchitectureDecisionsCore
         Decision New();
         Task Save(Decision decision);
         Task<Decision> Get(Guid decisionId);
+        Task Delete(Guid decisionId);
     }
 }

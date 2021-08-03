@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - ArchitectureDecisionsWeb</title>
+    <title>@ViewData["Title"] - Architecture Decisions</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css"/>
 </head>
@@ -22,8 +22,8 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Execute">Home</a>
                     </li>
                     <li class="nav-item">
-                        <form asp-controller="NewDecision" asp-action="Execute">
-                            <button class="nav-link text-dark" asp-area="" asp-controller="NewDecision" asp-action="Execute">New Decision</button>
+                        <form asp-controller="NewDecision" asp-action="Execute" id="newDecision">
+                            <a class="nav-link text-dark" href="javascript://" onclick="document.getElementById('newDecision').submit()">New Decision</a>
                         </form>
                     </li>
                 </ul>
@@ -33,6 +33,10 @@
 </header>
 <div class="container">
     <main role="main" class="pb-3">
+        @if (TempData["info"] != null)
+        {
+            <h5 class="alert-success">@TempData["info"]</h5>
+        }
         @RenderBody()
     </main>
 </div>

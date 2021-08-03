@@ -11,15 +11,15 @@
 
 <div>
 
-    <form>
+    <form asp-controller="SaveDecision" asp-action="Execute" method="POST">
         <div class="form-group">
             <label for="displayName">Display Name</label>
-            <input id="displayName" type="text" class="form-control" value="@Model.Decision.DisplayName" placeholder="Decision Display Name">
+            <input id="displayName" name="displayName" type="text" class="form-control" value="@Model.Decision.DisplayName" placeholder="Decision Display Name">
         </div>
 
         <div class="form-group">
             <label for="problemStatement">Problem Statement </label>
-            <input id="problemStatement" type="text" class="form-control" value="@Model.Decision.ProblemStatement" placeholder="Problem Statement">
+            <input id="problemStatement" name="problemStatement" type="text" class="form-control" value="@Model.Decision.ProblemStatement" placeholder="Problem Statement">
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>

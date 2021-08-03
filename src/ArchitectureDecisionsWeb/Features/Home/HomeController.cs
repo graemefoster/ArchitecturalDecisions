@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using ArchitectureDecisionsCore;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +19,7 @@ namespace ArchitectureDecisionsWeb.Features.Home
         {
             return View(new ViewModel()
             {
-                Problems = await _repository.GetDecisions()
+                Problems = (await _repository.GetDecisions()).OrderByDescending(x => x.UpdatedAt).ThenByDescending(x => x.CreatedAt).ToArray()
             });
         }
     }
