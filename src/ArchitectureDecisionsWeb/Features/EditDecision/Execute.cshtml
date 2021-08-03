@@ -1,7 +1,8 @@
-﻿@model ArchitectureDecisionsWeb.Features.EditDecision.ViewModel
+﻿@using Newtonsoft.Json
+@model ArchitectureDecisionsWeb.Features.EditDecision.ViewModel
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = Model.Decision.DisplayName;
     Layout = "_Layout";
 }
 
@@ -11,7 +12,10 @@
 
 <div>
 
-    <form asp-controller="SaveDecision" asp-action="Execute" method="POST">
+    <form id="saveDecisionForm" asp-controller="SaveDecision" asp-action="Execute" method="POST">
+
+        <input name="id" type="hidden" value="@Model.Decision.Id">
+        
         <div class="form-group">
             <label for="displayName">Display Name</label>
             <input id="displayName" name="displayName" type="text" class="form-control" value="@Model.Decision.DisplayName" placeholder="Decision Display Name">
@@ -22,8 +26,59 @@
             <input id="problemStatement" name="problemStatement" type="text" class="form-control" value="@Model.Decision.ProblemStatement" placeholder="Problem Statement">
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="form-group">
+            <label for="businessRequirementsEditor">Business Requirements </label>
+            <textarea id="businessRequirementsEditor" name="businessRequirements">@Model.Decision.BusinessRequirements</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="like_button_container">Criteria</label>
+            <div id="like_button_container"></div>
+        </div>
+
+        <hr/>
+        
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn btn-light" asp-controller="Home" asp-action="Execute">Cancel</a>
 
     </form>
 
 </div>
+
+@section Scripts
+{
+    <script src="https://cdn.tiny.cloud/1/ooj8w0elph7lqxg57hs9zqsmqzztc6fku86941ux6abhf1lm/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="~/js/components/errorBoundary.js" type="text/babel"></script>
+    <script src="~/js/components/criteria.js" type="text/babel"></script>
+
+    <script>
+    
+    tinymce.init({
+        selector: 'textarea#businessRequirementsEditor',
+        menubar: false
+    });
+    
+    var criteriaList = @Html.Raw(JsonConvert.SerializeObject(Model.Decision.SolutionCriteria.Select(x => Html.Encode(x.Description))));
+    function updateCriteria(newCriteria) {
+        criteriaList = newCriteria;
+    }
+    
+    $('#saveDecisionForm').submit(function () {
+        $('#saveDecisionForm').find("input[data-fabricated = 'true']").remove();
+        var count = 0;
+        criteriaList.forEach(function (criteria) {
+            $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${criteria.definition}' name='solutionCriteria[${count++}].Description'>`);
+        });
+    });
+
+    </script>
+
+    <script type="text/babel">
+        const domContainer = document.querySelector('#like_button_container');
+        ReactDOM.render(<ErrorBoundary><Criteria criteria={criteriaList} onUpdate={x => updateCriteria(x)} /></ErrorBoundary>, domContainer);
+    </script>
+
+}

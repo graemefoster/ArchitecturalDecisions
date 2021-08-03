@@ -41,7 +41,7 @@
                         </td>
                         <td><form asp-controller="DeleteDecision" asp-action="Execute" asp-route-id="@decision.Id" method="POST">
                             <button type="button" class="btn btn-danger" id="btnDelete-@decision.Id" onclick="document.getElementById('btnDelete-@decision.Id').style.display='none'; document.getElementById('btnReallyDelete-@decision.Id').style.display='block';">Delete</button>
-                            <button class="btn btn-danger" id="btnReallyDelete-@decision.Id" style="display:none;">Yes realy!</button>
+                            <button class="btn btn-danger" id="btnReallyDelete-@decision.Id" style="display:none;">Yes, really!</button>
                         </form>
                         </td>
                         <td class="text-left">@decision.DisplayName</td>

@@ -10,7 +10,7 @@ namespace ArchitectureDecisionsCore
         public string DisplayName { get; set; } = string.Empty;
         public string ProblemStatement { get; set; } = string.Empty;
         public string BusinessRequirements { get; set; } = string.Empty;
-        public List<Criteria> SolutionCriteria { get; set; } = new List<Criteria>();
+        public List<Criteria> SolutionCriteria { get; set; }
         public List<Option> Options { get; set; } = new List<Option>();
         public Dictionary<Criteria, Comparison> Comparison { get; set; } = new Dictionary<Criteria, Comparison>();
         public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.Now;
