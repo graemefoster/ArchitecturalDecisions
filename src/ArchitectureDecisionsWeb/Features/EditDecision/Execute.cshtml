@@ -53,6 +53,8 @@
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script src="~/js/components/errorBoundary.js" type="text/babel"></script>
     <script src="~/js/components/criteria.js" type="text/babel"></script>
+    <script src="~/js/components/options.js" type="text/babel"></script>
+    <script src="~/js/components/decision.js" type="text/babel"></script>
 
     <script>
     
@@ -61,24 +63,26 @@
         menubar: false
     });
     
-    var criteriaList = @Html.Raw(JsonConvert.SerializeObject(Model.Decision.SolutionCriteria.Select(x => Html.Encode(x.Description))));
-    function updateCriteria(newCriteria) {
-        criteriaList = newCriteria;
+    let decision = @Html.Raw(JsonConvert.SerializeObject(Model.Decision));
+
+    function updateDecision(decision) {
+        this.decision = decision;
     }
-    
+        
     $('#saveDecisionForm').submit(function () {
         $('#saveDecisionForm').find("input[data-fabricated = 'true']").remove();
         var count = 0;
-        criteriaList.forEach(function (criteria) {
-            $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${criteria.definition}' name='solutionCriteria[${count++}].Description'>`);
+        decision.SolutionCriteria.forEach(function (criteria) {
+            $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${criteria.Description}' name='solutionCriteria[${count}].Description'>`);
+            $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${criteria.Id}' name='solutionCriteria[${count++}].Id'>`);
         });
     });
-
     </script>
 
     <script type="text/babel">
         const domContainer = document.querySelector('#like_button_container');
-        ReactDOM.render(<ErrorBoundary><Criteria criteria={criteriaList} onUpdate={x => updateCriteria(x)} /></ErrorBoundary>, domContainer);
+        console.log(decision);
+        ReactDOM.render(<ErrorBoundary><Decision decision={decision} onUpdate={x => updateDecision(x)} /></ErrorBoundary>, domContainer);
     </script>
 
 }

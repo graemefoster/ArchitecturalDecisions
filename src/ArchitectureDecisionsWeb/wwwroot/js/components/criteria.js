@@ -4,53 +4,33 @@ class Criteria extends React.Component {
 
     constructor(props) {
         super(props);
-        var count = 0;
-        this.state = {
-            criteria: props.criteria.map(x => ({
-                id: (++count),
-                definition: x
-            }))
-        };
-    }
-
-    componentDidMount() {
-        this.props.onUpdate(this.state.criteria);
     }
 
     render() {
 
         const button = <button type="button" className={'btn btn-block btn-light'} onClick={() => {
-            const newState = this.state.criteria.concat({
-                id: this.state.criteria.length + 1,
-                definition: 'New Criteria'
-            });
-            this.setState({criteria: newState});
+            this.props.onNewCriteria({ Id: Math.max(...this.props.criteria.map(x => x.Id)) + 1, Description: '?' });
         }}>New Criteria</button>
 
-        if (this.state.criteria.length === 0) {
+        if (this.props.criteria.length === 0) {
             return <div>
                 <p>No criteria defined</p>
                 {button}
             </div>;
         }
 
-        const criteria = this.state.criteria.map(x => (
-            <li key={x.id} className={'list-group-item'}>
+        const criteria = this.props.criteria.map(x => (
+            <li key={x.Id} className={'list-group-item'}>
                 <div className={'form-row'}>
                     <div className={'col'}>
-                        <input className={'form-control'} type="text" value={x.definition} onChange={evt => {
-                            x.definition = evt.target.value;
-                            this.setState({criteria: this.state.criteria});
-                            this.props.onUpdate(this.state.criteria);
+                        <input className={'form-control'} type="text" value={x.Description} onChange={evt => {
+                            x.Description = evt.target.value;
+                            this.props.onUpdateCriteria(criteria);
                         }}/>
                     </div>
                     <div className={'col'}>
                         <button type={'button'} className={'btn btn-danger btn-sm mb-2'} onClick={() => {
-                            let index = this.state.criteria.indexOf(x);
-                            let state = this.state.criteria;
-                            state.splice(index, 1);
-                            this.setState({criteria: state});
-                            this.props.onUpdate(state);
+                            this.props.onRemoveCriteria(x);
                         }}>Delete
                         </button>
                     </div>
