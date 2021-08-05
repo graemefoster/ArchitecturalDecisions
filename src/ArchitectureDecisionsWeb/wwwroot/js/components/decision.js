@@ -6,23 +6,22 @@ class Decision extends React.Component {
         super(props);
         this.state = {decision: props.decision};
     }
-    
-    onUpdateCriteria(criteria) {
-        this.setState({decision : decision})
-    }
 
-    onNewCriteria(newCriteria) {
-        this.state.decision.SolutionCriteria.push(newCriteria);
-        this.setState({decision: decision});
+    onUpdateItem(item, list) {
+        this.setState({decision: this.state.decision});
         this.onUpdate();
     }
-    
-    onRemoveCriteria(criteria) {
-        let decision = this.state.decision;
-        let state = decision.SolutionCriteria;
-        let index = state.indexOf(criteria);
-        state.splice(index, 1);
-        this.setState({decision: decision});
+
+    onNewItem(item, list) {
+        list.push(item);
+        this.setState({decision: this.state.decision});
+        this.onUpdate();
+    }
+
+    onRemoveItem(item, list) {
+        let index = list.indexOf(item);
+        list.splice(index, 1);
+        this.setState({decision: this.state.decision});
         this.onUpdate();
     }
 
@@ -34,13 +33,29 @@ class Decision extends React.Component {
 
         return (
             <div>
-                <Criteria 
-                    criteria={this.state.decision.SolutionCriteria} 
-                    onNewCriteria={x => this.onNewCriteria(x)} 
-                    onRemoveCriteria={x => this.onRemoveCriteria(x)}
-                    onUpdateCriteria={x => this.onUpdateCriteria(x)}/>
-                <Options />
+                <ReactBootstrap.Tabs defaultActiveKey="criteria" id="uncontrolled-tab-example" className="mb-3">
+                    <ReactBootstrap.Tab eventKey="criteria" title="Criteria">
+                        <Criteria
+                            criteria={this.state.decision.SolutionCriteria}
+                            onNewCriteria={x => this.onNewItem(x, this.state.decision.SolutionCriteria)}
+                            onRemoveCriteria={x => this.onRemoveItem(x, this.state.decision.SolutionCriteria)}
+                            onUpdateCriteria={x => this.onUpdateItem(x, this.state.decision.SolutionCriteria)}/>
+                    </ReactBootstrap.Tab>
+                    <ReactBootstrap.Tab eventKey="options" title="Options">
+                        <Options
+                            options={this.state.decision.Options}
+                            onNewOption={x => this.onNewItem(x, this.state.decision.Options)}
+                            onRemoveOption={x => this.onRemoveItem(x, this.state.decision.Options)}
+                            onUpdateOption={x => this.onUpdateItem(x, this.state.decision.Options)}/>
+                    </ReactBootstrap.Tab>
+                </ReactBootstrap.Tabs>
+
+                <Matrix
+                    options={this.state.decision.Options}
+                    criteria={this.state.decision.SolutionCriteria}/>
+
             </div>
+
         );
     }
 }

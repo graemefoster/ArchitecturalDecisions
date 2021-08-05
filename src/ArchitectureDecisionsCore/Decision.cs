@@ -11,7 +11,7 @@ namespace ArchitectureDecisionsCore
         public string ProblemStatement { get; set; } = string.Empty;
         public string BusinessRequirements { get; set; } = string.Empty;
         public List<Criteria> SolutionCriteria { get; set; }
-        public List<Option> Options { get; set; } = new List<Option>();
+        public List<Option> Options { get; set; }
         public Dictionary<Criteria, Comparison> Comparison { get; set; } = new Dictionary<Criteria, Comparison>();
         public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.Now;
         public DateTimeOffset UpdatedDate { get; set; } = DateTimeOffset.Now;
