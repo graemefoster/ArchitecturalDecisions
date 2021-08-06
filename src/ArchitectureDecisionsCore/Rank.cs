@@ -2,8 +2,8 @@
 {
     public enum Rank
     {
-        Poor,
-        Average,
-        Good
+        Poor = 0,
+        Average = 1,
+        Good = 2
     }
 }

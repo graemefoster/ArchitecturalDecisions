@@ -36,6 +36,14 @@ class Options extends React.Component {
                         </button>
                     </div>
                 </div>
+                <div className={'form-row'}>
+                    <div className={'col'}>
+                        <textarea className={'form-control'} value={x.Diagram || ''} onChange={evt => {
+                            x.Diagram = evt.target.value || ''
+                            this.props.onUpdateOption(x);
+                        }} />
+                    </div>
+                </div>
             </li>));
 
         return (

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-
+﻿
 namespace ArchitectureDecisionsCore
 {
     public class Comparison
     {
-        public IList<Rating> Ratings { get; set; } = new List<Rating>();
+        public int OptionId { get; set; }
+        public Rating Rating { get; set; } = new Rating();
     }
 }

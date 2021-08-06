@@ -1,4 +1,5 @@
 ﻿@using Newtonsoft.Json
+@using ArchitectureDecisionsCore
 @model ArchitectureDecisionsWeb.Features.EditDecision.ViewModel
 
 @{
@@ -41,7 +42,7 @@
         <a class="btn btn-light" asp-controller="Home" asp-action="Execute">Cancel</a>
 
     </form>
-
+    
 </div>
 
 @section Scripts
@@ -58,7 +59,11 @@
     <script src="~/js/components/decision.js" type="text/babel"></script>
 
     <script>
-    
+
+    $.ajaxSetup({
+      contentType: "application/json; charset=utf-8"
+    });
+
     tinymce.init({
         selector: 'textarea#businessRequirementsEditor',
         menubar: false
@@ -71,17 +76,34 @@
     }
         
     $('#saveDecisionForm').submit(function () {
-        $('#saveDecisionForm').find("input[data-fabricated = 'true']").remove();
-        let count = 0;
-        decision.SolutionCriteria.forEach(function (criteria) {
-            $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${criteria.Description}' name='solutionCriteria[${count}].Description'>`);
-            $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${criteria.Id}' name='solutionCriteria[${count++}].Id'>`);
-        });
-        count = 0;
-        decision.Options.forEach(function (option) {
-            $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${option.Description}' name='options[${count}].Description'>`);
-            $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${option.Id}' name='options[${count++}].Id'>`);
-        });
+
+        decision.displayName = document.getElementById('displayName').value;
+        decision.problemStatement = document.getElementById('problemStatement').value;
+        decision.businessRequirements = document.getElementById('businessRequirementsEditor').value;
+        
+        $.post(
+            '@Url.Action("Execute", "SaveDecisionApi", new {id = Model.Decision.Id})', 
+            JSON.stringify(decision),
+            function (data, status, xhr) {
+                console.log(status);
+            },
+            'json');
+        
+        return false;
+        
+        // $('#saveDecisionForm').find("input[data-fabricated = 'true']").remove();
+        // let count = 0;
+        // decision.SolutionCriteria.forEach(function (criteria) {
+        //     $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${criteria.Description}' name='solutionCriteria[${count}].Description'>`);
+        //     $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${criteria.Id}' name='solutionCriteria[${count++}].Id'>`);
+        // });
+        // count = 0;
+        // decision.Options.forEach(function (option) {
+        //     $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${option.Id}' name='options[${count}].Id'>`);
+        //     $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${option.Description}' name='options[${count}].Description'>`);
+        //     $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${option.Diagram}' name='options[${count++}].Diagram'>`);
+        // });
+
     });
     </script>
 

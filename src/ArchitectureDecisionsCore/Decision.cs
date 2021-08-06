@@ -12,8 +12,28 @@ namespace ArchitectureDecisionsCore
         public string BusinessRequirements { get; set; } = string.Empty;
         public List<Criteria> SolutionCriteria { get; set; }
         public List<Option> Options { get; set; }
-        public Dictionary<Criteria, Comparison> Comparison { get; set; } = new Dictionary<Criteria, Comparison>();
+        public Dictionary<int, Dictionary<int, Comparison>> Comparison { get; set; } = new Dictionary<int, Dictionary<int, Comparison>>();
         public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.Now;
         public DateTimeOffset UpdatedDate { get; set; } = DateTimeOffset.Now;
+
+        public void Sanitise()
+        {
+            foreach (var criteria in SolutionCriteria)
+            {
+                if (!Comparison.ContainsKey(criteria.Id))
+                {
+                    Comparison[criteria.Id] = new Dictionary<int, Comparison>();
+                }
+
+                var comparison = Comparison[criteria.Id];
+                foreach (var option in Options)
+                {
+                    if (!comparison.ContainsKey(option.Id))
+                    {
+                        comparison[option.Id] = new Comparison();
+                    }
+                }
+            }
+        }
     }
 }

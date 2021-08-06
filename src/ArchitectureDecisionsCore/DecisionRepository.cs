@@ -37,15 +37,19 @@ namespace ArchitectureDecisionsCore
             return new();
         }
 
-        public Task Save(Decision decision)
+        public async Task<Decision> Save(Decision decision)
         {
-            return File.WriteAllTextAsync(Path.Combine(_directory, decision.Id + ".json"),
+            decision.Sanitise();
+            await File.WriteAllTextAsync(Path.Combine(_directory, decision.Id + ".json"),
                 JsonConvert.SerializeObject(decision, Formatting.Indented));
+            return decision;
         }
 
-        public Task<Decision> Get(Guid decisionId)
+        public async Task<Decision> Get(Guid decisionId)
         {
-            return FetchDecision(Path.Combine(_directory, decisionId + ".json"));
+            var decision = await FetchDecision(Path.Combine(_directory, decisionId + ".json"));
+            decision.Sanitise();
+            return decision;
         }
 
         public Task Delete(Guid decisionId)

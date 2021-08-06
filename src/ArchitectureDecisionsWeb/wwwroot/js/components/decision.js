@@ -24,6 +24,12 @@ class Decision extends React.Component {
         this.setState({decision: this.state.decision});
         this.onUpdate();
     }
+    
+    onUpdateMatrix(criteriaId, optionId, val) {
+        decision.Comparison[criteriaId][optionId].Rating = val;            
+        this.setState({decision: this.state.decision});
+        this.onUpdate();
+    }
 
     onUpdate() {
         this.props.onUpdate(this.state.decision);
@@ -52,7 +58,10 @@ class Decision extends React.Component {
 
                 <Matrix
                     options={this.state.decision.Options}
-                    criteria={this.state.decision.SolutionCriteria}/>
+                    criteria={this.state.decision.SolutionCriteria}
+                    comparisons={this.state.decision.Comparison}
+                    onUpdateMatrix={(criteria, option, val) => this.onUpdateMatrix(criteria, option, val) }
+                />
 
             </div>
 

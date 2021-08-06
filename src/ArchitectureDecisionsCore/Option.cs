@@ -5,8 +5,8 @@ namespace ArchitectureDecisionsCore
     public class Option
     {
         public int Id { get; set; }
-        public string Description { get; set; } = string.Empty;
-        public byte[] DrawIoDiagram { get; set; } = System.Array.Empty<byte>();
+        public string? Description { get; set; }
+        public string? Diagram { get; set; }
         public List<ServiceCost> EstimatedServiceCosts { get; set; } = new List<ServiceCost>();
     }
 }

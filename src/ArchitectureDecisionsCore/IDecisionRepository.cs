@@ -8,7 +8,7 @@ namespace ArchitectureDecisionsCore
     {
         public Task<IList<ReferenceItem<Decision>>> GetDecisions();
         Decision New();
-        Task Save(Decision decision);
+        Task<Decision> Save(Decision decision);
         Task<Decision> Get(Guid decisionId);
         Task Delete(Guid decisionId);
     }
