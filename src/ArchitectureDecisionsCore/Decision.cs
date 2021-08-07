@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ArchitectureDecisionsCore.Abstractions;
 
 namespace ArchitectureDecisionsCore
@@ -10,14 +11,18 @@ namespace ArchitectureDecisionsCore
         public string DisplayName { get; set; } = string.Empty;
         public string ProblemStatement { get; set; } = string.Empty;
         public string BusinessRequirements { get; set; } = string.Empty;
-        public List<Criteria> SolutionCriteria { get; set; }
-        public List<Option> Options { get; set; }
-        public Dictionary<int, Dictionary<int, Comparison>> Comparison { get; set; } = new Dictionary<int, Dictionary<int, Comparison>>();
+        public List<Criteria>? SolutionCriteria { get; set; }
+        public List<Option>? Options { get; set; }
+        public Dictionary<int, Dictionary<int, Comparison>>? Comparison { get; set; }
         public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.Now;
         public DateTimeOffset UpdatedDate { get; set; } = DateTimeOffset.Now;
 
         public void Sanitise()
         {
+            SolutionCriteria ??= new List<Criteria>();
+            Comparison ??= new Dictionary<int, Dictionary<int, Comparison>>();
+            Options ??= new List<Option>();
+            
             foreach (var criteria in SolutionCriteria)
             {
                 if (!Comparison.ContainsKey(criteria.Id))
