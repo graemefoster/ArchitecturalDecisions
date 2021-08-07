@@ -72,7 +72,7 @@
     let decision = @Html.Raw(JsonConvert.SerializeObject(Model.Decision));
 
     function updateDecision(decision) {
-        this.decision = decision;
+        window.decision = decision;
     }
         
     $('#saveDecisionForm').submit(function () {
@@ -85,7 +85,7 @@
         document.getElementById('saveButton').disabled = true;
         $.post(
             '@Url.Action("Execute", "SaveDecisionApi", new {id = Model.Decision.Id})', 
-            JSON.stringify(decision),
+            JSON.stringify(window.decision),
             function (data, status, xhr) {
                 document.getElementById('saveButton').disabled = false;
                 let btnClass = status === 'success' ? 'btn-success' : 'btn-danger';

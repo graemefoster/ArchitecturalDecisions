@@ -4,38 +4,64 @@ class Decision extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {decision: props.decision};
+        this.state = {decision: props.decision, undoBuffer: []};
+    }
+    
+    
+    cloneDecision() {
+        return JSON.parse(JSON.stringify(this.state.decision))
+    }
+    
+    updateClone(action) {
+        let clonedDecision = this.cloneDecision()
+        action(clonedDecision)
+        this.onUpdate(clonedDecision)
     }
 
-    onUpdateItem(item, list) {
-        this.setState({decision: this.state.decision});
-        this.onUpdate();
+    onUpdateItem(decision, updatedItem, getList) {
+        let listToRemoveFrom = getList(decision)
+        let index = listToRemoveFrom.findIndex(x => x.Id == updatedItem.Id)
+        listToRemoveFrom.splice(index, 1, JSON.parse(JSON.stringify(updatedItem)));
+        this.onUpdate(decision);
     }
 
-    onNewItem(item, list) {
-        list.push(item);
-        this.setState({decision: this.state.decision});
-        this.onUpdate();
-    }
-
-    onRemoveItem(item, list) {
-        let index = list.indexOf(item);
-        list.splice(index, 1);
-        this.setState({decision: this.state.decision});
-        this.onUpdate();
+    removeItemById(decision, id, getList) {
+        let listToRemoveFrom = getList(decision)
+        let index = listToRemoveFrom.findIndex(x => x.Id == id)
+        listToRemoveFrom.splice(index, 1);
+        this.onUpdate(decision);
     }
 
     onUpdateMatrix(criteriaId, optionId, val) {
-        decision.Comparison[criteriaId][optionId].Rating = val;
-        this.setState({decision: this.state.decision});
-        this.onUpdate();
+        let clonedDecision = this.cloneDecision()
+        clonedDecision.Comparison[criteriaId][optionId].Rating = val;
+        this.onUpdate(clonedDecision);
     }
 
-    onUpdate() {
-        this.props.onUpdate(this.state.decision);
+    onUpdate(decision) {
+        this.sanitiseDecision(decision)
+        let undoBuffer = this.state.undoBuffer
+        undoBuffer.push(this.state.decision)
+        this.setState({decision: decision, undoBuffer: undoBuffer})
+        this.props.onUpdate(decision);
+    }
+    
+    sanitiseDecision(decision) {
+        decision.SolutionCriteria.forEach(criteria => decision.Options.forEach(option => {
+            let comparisonCriteria = decision.Comparison[criteria.Id]
+            if (!comparisonCriteria) {
+                decision.Comparison[criteria.Id] = {}
+            }
+            let optionCriteria = decision.Comparison[criteria.Id][option.Id]
+            if (!optionCriteria) {
+                decision.Comparison[criteria.Id][option.Id] = { Rating: { Commentary: '', Rank: 1 }}
+            }
+        }));
     }
 
     render() {
+        
+        const clonedDecision = JSON.parse(JSON.stringify(this.state.decision))
 
         return (
             <div>
@@ -43,23 +69,23 @@ class Decision extends React.Component {
                 <ReactBootstrap.Tabs defaultActiveKey="criteria" id="uncontrolled-tab-example" className="mb-3">
                     <ReactBootstrap.Tab eventKey="criteria" title="Criteria">
                         <Criteria
-                            criteria={this.state.decision.SolutionCriteria}
-                            onNewCriteria={x => this.onNewItem(x, this.state.decision.SolutionCriteria)}
-                            onRemoveCriteria={x => this.onRemoveItem(x, this.state.decision.SolutionCriteria)}
-                            onUpdateCriteria={x => this.onUpdateItem(x, this.state.decision.SolutionCriteria)}/>
+                            criteria={clonedDecision.SolutionCriteria}
+                            onNewCriteria={x => this.updateClone(c => c.SolutionCriteria.push(x))}
+                            onRemoveCriteria={x => this.removeItemById(this.cloneDecision(), x.Id, x => x.SolutionCriteria)}
+                            onUpdateCriteria={x => this.onUpdateItem(this.cloneDecision(), x, x => x.SolutionCriteria)}/>
                     </ReactBootstrap.Tab>
                     <ReactBootstrap.Tab eventKey="options" title="Options">
                         <Options
                             options={this.state.decision.Options}
-                            onNewOption={x => this.onNewItem(x, this.state.decision.Options)}
-                            onRemoveOption={x => this.onRemoveItem(x, this.state.decision.Options)}
-                            onUpdateOption={x => this.onUpdateItem(x, this.state.decision.Options)}/>
+                            onNewOption={x => this.updateClone(c => c.Options.push(x))}
+                            onRemoveOption={x => this.removeItemById(this.cloneDecision(), x.Id, x => x.Options)}
+                            onUpdateOption={x => this.onUpdateItem(this.cloneDecision(), x, x => x.Options)}/>
                     </ReactBootstrap.Tab>
                     <ReactBootstrap.Tab eventKey="comparisons" title="Comparisons">
                         <Matrix
-                            options={this.state.decision.Options}
-                            criteria={this.state.decision.SolutionCriteria}
-                            comparisons={this.state.decision.Comparison}
+                            options={clonedDecision.Options}
+                            criteria={clonedDecision.SolutionCriteria}
+                            comparisons={clonedDecision.Comparison}
                             onUpdateMatrix={(criteria, option, val) => this.onUpdateMatrix(criteria, option, val)}
                         />
                     </ReactBootstrap.Tab>
