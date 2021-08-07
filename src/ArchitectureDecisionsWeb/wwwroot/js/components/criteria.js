@@ -10,7 +10,7 @@ class Criteria extends React.Component {
 
         const button = <button type="button" className={'btn btn-block btn-light'} onClick={() => {
             const newId = this.props.criteria.length === 0 ? 0 : Math.max(...this.props.criteria.map(x => x.Id)) + 1;
-            this.props.onNewCriteria({ Id: newId, Description: '?' });
+            this.props.onNewCriteria({Id: newId, Description: '?'});
         }}>New Criteria</button>
 
         if (this.props.criteria.length === 0) {
@@ -23,6 +23,7 @@ class Criteria extends React.Component {
         const criteria = this.props.criteria.map(x => (
             <li key={x.Id} className={'list-group-item'}>
                 <div className={'form-row'}>
+                    <label className={'col-form-label'}>Criteria</label>
                     <div className={'col'}>
                         <input className={'form-control'} type="text" value={x.Description} onChange={evt => {
                             x.Description = evt.target.value;

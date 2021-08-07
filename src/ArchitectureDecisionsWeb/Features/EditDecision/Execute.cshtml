@@ -38,8 +38,8 @@
 
         <hr/>
 
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a class="btn btn-light" asp-controller="Home" asp-action="Execute">Cancel</a>
+        <button type="submit" class="btn btn-primary" id="saveButton">Save</button>
+        <a class="btn btn-light" asp-controller="Home" asp-action="Execute">Back</a>
 
     </form>
     
@@ -80,29 +80,23 @@
         decision.displayName = document.getElementById('displayName').value;
         decision.problemStatement = document.getElementById('problemStatement').value;
         decision.businessRequirements = document.getElementById('businessRequirementsEditor').value;
-        
+        decision.happySave = null;
+
+        document.getElementById('saveButton').disabled = true;
         $.post(
             '@Url.Action("Execute", "SaveDecisionApi", new {id = Model.Decision.Id})', 
             JSON.stringify(decision),
             function (data, status, xhr) {
-                console.log(status);
+                document.getElementById('saveButton').disabled = false;
+                let btnClass = status === 'success' ? 'btn-success' : 'btn-danger';
+                document.getElementById('saveButton').className = `btn ${btnClass}`;
+                window.setTimeout(function () {
+                    document.getElementById('saveButton').className = 'btn btn-primary';
+                }, 2000);
             },
             'json');
         
         return false;
-        
-        // $('#saveDecisionForm').find("input[data-fabricated = 'true']").remove();
-        // let count = 0;
-        // decision.SolutionCriteria.forEach(function (criteria) {
-        //     $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${criteria.Description}' name='solutionCriteria[${count}].Description'>`);
-        //     $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${criteria.Id}' name='solutionCriteria[${count++}].Id'>`);
-        // });
-        // count = 0;
-        // decision.Options.forEach(function (option) {
-        //     $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${option.Id}' name='options[${count}].Id'>`);
-        //     $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${option.Description}' name='options[${count}].Description'>`);
-        //     $('#saveDecisionForm').append(`<input type='hidden' data-fabricated='true' value='${option.Diagram}' name='options[${count++}].Diagram'>`);
-        // });
 
     });
     </script>

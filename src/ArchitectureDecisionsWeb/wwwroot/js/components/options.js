@@ -10,7 +10,7 @@ class Options extends React.Component {
 
         const button = <button type="button" className={'btn btn-block btn-light'} onClick={() => {
             const newId = this.props.options.length === 0 ? 0 : Math.max(...this.props.options.map(x => x.Id)) + 1;
-            this.props.onNewOption({ Id: newId, Description: '?' });
+            this.props.onNewOption({Id: newId, Description: '?'});
         }}>New Option</button>
 
         if (this.props.options.length === 0) {
@@ -23,6 +23,7 @@ class Options extends React.Component {
         const options = this.props.options.map(x => (
             <li key={x.Id} className={'list-group-item'}>
                 <div className={'form-row'}>
+                    <label className={'col-form-label'}>Description</label>
                     <div className={'col'}>
                         <input className={'form-control'} type="text" value={x.Description} onChange={evt => {
                             x.Description = evt.target.value;
@@ -38,10 +39,11 @@ class Options extends React.Component {
                 </div>
                 <div className={'form-row'}>
                     <div className={'col'}>
-                        <textarea className={'form-control'} value={x.Diagram || ''} onChange={evt => {
+                        <label>Draw IO Diagram</label>
+                        <textarea rows={10} className={'form-control'} value={x.Diagram || ''} onChange={evt => {
                             x.Diagram = evt.target.value || ''
                             this.props.onUpdateOption(x);
-                        }} />
+                        }}/>
                     </div>
                 </div>
             </li>));
