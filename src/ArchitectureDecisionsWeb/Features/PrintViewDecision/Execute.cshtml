@@ -5,55 +5,67 @@
 }
 
 <div class="text-left">
-    <h3>@Html.Raw(Model.Decision.DisplayName)</h3>
+    <h2>@Html.Raw(Model.Decision.DisplayName)</h2>
 </div>
 
 <div class="text-left">
-    <h4>Problem Statement</h4>
     <p>@Model.Decision.ProblemStatement</p>
 </div>
-
+<hr>
 <div class="text-left">
-    <h4>Business Context</h4>
     @Html.Raw(Model.Decision.BusinessRequirements)
 </div>
-
+<hr/>
 <div class="text-left">
     <h4>Criteria</h4>
-    <ul>
+    <ul class="list-group-flush">
         @foreach (var criteria in Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>())
         {
-            <li>@criteria.Description</li>
+            <li class="list-group-item">@criteria.Description</li>
         }
     </ul>
 </div>
-
+<hr/>
 <div class="text-left">
-    <h4>Criteria</h4>
-    <ul>
-        @foreach (var criteria in Model.Decision.Options ?? Enumerable.Empty<Option>())
+    <h4>Options</h4>
+    <ul class="list-group">
+        @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
         {
-            <li>
-                @criteria.Description
+            <li class="list-group-item">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">@option.Name</h5>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-4">
+                        @Html.Raw(option.Description)
+                    </div>
+                    <div class="col-8">
+                    @Html.Raw(option.Diagram)
+                    </div>
+                </div>
             </li>
         }
     </ul>
 </div>
-
+<hr/>
 <div class="text-left">
     <h4>Comparison</h4>
-    <table class="table">
-        <thead>
-        @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
-        {
-            <tr><th>@option.Description</th></tr>
-        }
+    <table class="table table-bordered">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col"></th>
+            @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
+            {
+                <th>@option.Name</th>
+            }
+        </tr>
         </thead>
         <tbody>
         @foreach (var criteria in Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>())
         {
             <tr>
-                <td>@criteria.Description</td>
+                <th scope="row">@criteria.Description</th>
                 @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
                 {
                     var comparison = Model.Decision.Comparison[criteria.Id][option.Id];

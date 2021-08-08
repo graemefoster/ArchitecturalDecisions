@@ -13,7 +13,7 @@ class Matrix extends React.Component {
                 <thead>
                 <tr className={''}>
                     <td/>
-                    {this.props.options.map(x => <td key={`description-${x.Id}`}>{x.Description}</td>)}
+                    {this.props.options.map(x => <td key={`description-${x.Id}`}>{x.Name}</td>)}
                 </tr>
                 </thead>
                 <tbody>
