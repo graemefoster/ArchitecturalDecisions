@@ -2,95 +2,104 @@
 @model ArchitectureDecisionsWeb.Features.PrintViewDecision.ViewModel;
 @{
     ViewData["Title"] = Model.Decision.DisplayName;
+    Layout = "";
 }
+<html>
+<head>
+    <title>@Model.Decision.DisplayName</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css"/>
+</head>
+<body>
+<div class="container">
 
-<div class="text-left">
-    <h2>@Html.Raw(Model.Decision.DisplayName)</h2>
-</div>
+    <div class="text-left">
+        <h2>@Html.Raw(Model.Decision.DisplayName)</h2>
+    </div>
 
-<div class="text-left">
-    <p>@Model.Decision.ProblemStatement</p>
-</div>
-<hr>
-<div class="text-left">
-    @Html.Raw(Model.Decision.BusinessRequirements)
-</div>
-<hr/>
-<div class="text-left">
-    <h4>Criteria</h4>
-    <ul class="list-group-flush">
-        @foreach (var criteria in Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>())
-        {
-            <li class="list-group-item">@criteria.Description</li>
-        }
-    </ul>
-</div>
-<hr/>
-<div class="text-left">
-    <h4>Options</h4>
-    <ul class="list-group">
-        @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
-        {
-            <li class="list-group-item">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">@option.Name</h5>
-                </div>
-                <hr/>
-                <div class="row">
-                    <div class="col-4">
-                        @Html.Raw(option.Description)
-                    </div>
-                    <div class="col-8">
-                    @Html.Raw(option.Diagram)
-                    </div>
-                </div>
-            </li>
-        }
-    </ul>
-</div>
-<hr/>
-<div class="text-left">
-    <h4>Comparison</h4>
-    <table class="table table-bordered">
-        <thead class="thead-light">
-        <tr>
-            <th scope="col"></th>
+    <div class="text-left">
+        <p>@Model.Decision.ProblemStatement</p>
+    </div>
+    <hr>
+    <div class="text-left">
+        @Html.Raw(Model.Decision.BusinessRequirements)
+    </div>
+    <hr/>
+    <div class="text-left">
+        <h4>Criteria</h4>
+        <ul class="list-group-flush">
+            @foreach (var criteria in Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>())
+            {
+                <li class="list-group-item">@criteria.Description</li>
+            }
+        </ul>
+    </div>
+    <hr/>
+    <div class="text-left">
+        <h4>Options</h4>
+        <ul class="list-group">
             @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
             {
-                <th>@option.Name</th>
+                <li class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">@option.Name</h5>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-4">
+                            @Html.Raw(option.Description)
+                        </div>
+                        <div class="col-8">
+                            @Html.Raw(option.Diagram)
+                        </div>
+                    </div>
+                </li>
             }
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var criteria in Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>())
-        {
+        </ul>
+    </div>
+    <hr/>
+    <div class="text-left">
+        <h4>Comparison</h4>
+        <table class="table table-bordered">
+            <thead class="thead-light">
             <tr>
-                <th scope="row">@criteria.Description</th>
+                <th scope="col"></th>
                 @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
                 {
-                    var comparison = Model.Decision.Comparison[criteria.Id][option.Id];
-                    var className = 
-                        comparison.Rating.Rank == Rank.Poor 
-                            ? "background-danger" 
-                            : comparison.Rating.Rank == Rank.Average 
-                                ? "bg-warning" 
-                                : "bg-success";
-                    <td class="@className">@comparison.Rating.Commentary</td>
+                    <th>@option.Name</th>
                 }
             </tr>
-        }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            @foreach (var criteria in Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>())
+            {
+                <tr>
+                    <th scope="row">@criteria.Description</th>
+                    @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
+                    {
+                        var comparison = Model.Decision.Comparison[criteria.Id][option.Id];
+                        var className = 
+                            comparison.Rating.Rank == Rank.Poor 
+                                ? "background-danger" 
+                                : comparison.Rating.Rank == Rank.Average 
+                                    ? "bg-warning" 
+                                    : "bg-success";
+                        <td class="@className">@comparison.Rating.Commentary</td>
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
 </div>
+<script src="https://cdn.tiny.cloud/1/ooj8w0elph7lqxg57hs9zqsmqzztc6fku86941ux6abhf1lm/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
-@section Scripts
-{
-    <script src="https://cdn.tiny.cloud/1/ooj8w0elph7lqxg57hs9zqsmqzztc6fku86941ux6abhf1lm/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-
-    <script>
+<script>
         tinymce.init({
             selector: 'textarea#businessRequirementsViewer',
             readonly : true
         });
     </script>
 }
+</body>
+</html>
