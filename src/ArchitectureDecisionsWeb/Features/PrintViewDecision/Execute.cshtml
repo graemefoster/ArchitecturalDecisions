@@ -1,0 +1,84 @@
+﻿@using ArchitectureDecisionsCore
+@model ArchitectureDecisionsWeb.Features.PrintViewDecision.ViewModel;
+@{
+    ViewData["Title"] = Model.Decision.DisplayName;
+}
+
+<div class="text-left">
+    <h3>@Html.Raw(Model.Decision.DisplayName)</h3>
+</div>
+
+<div class="text-left">
+    <h4>Problem Statement</h4>
+    <p>@Model.Decision.ProblemStatement</p>
+</div>
+
+<div class="text-left">
+    <h4>Business Context</h4>
+    @Html.Raw(Model.Decision.BusinessRequirements)
+</div>
+
+<div class="text-left">
+    <h4>Criteria</h4>
+    <ul>
+        @foreach (var criteria in Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>())
+        {
+            <li>@criteria.Description</li>
+        }
+    </ul>
+</div>
+
+<div class="text-left">
+    <h4>Criteria</h4>
+    <ul>
+        @foreach (var criteria in Model.Decision.Options ?? Enumerable.Empty<Option>())
+        {
+            <li>
+                @criteria.Description
+            </li>
+        }
+    </ul>
+</div>
+
+<div class="text-left">
+    <h4>Comparison</h4>
+    <table class="table">
+        <thead>
+        @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
+        {
+            <tr><th>@option.Description</th></tr>
+        }
+        </thead>
+        <tbody>
+        @foreach (var criteria in Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>())
+        {
+            <tr>
+                <td>@criteria.Description</td>
+                @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
+                {
+                    var comparison = Model.Decision.Comparison[criteria.Id][option.Id];
+                    var className = 
+                        comparison.Rating.Rank == Rank.Poor 
+                            ? "background-danger" 
+                            : comparison.Rating.Rank == Rank.Average 
+                                ? "bg-warning" 
+                                : "bg-success";
+                    <td class="@className">@comparison.Rating.Commentary</td>
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts
+{
+    <script src="https://cdn.tiny.cloud/1/ooj8w0elph7lqxg57hs9zqsmqzztc6fku86941ux6abhf1lm/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <script>
+        tinymce.init({
+            selector: 'textarea#businessRequirementsViewer',
+            readonly : true
+        });
+    </script>
+}
