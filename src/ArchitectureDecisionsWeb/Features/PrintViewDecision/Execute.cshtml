@@ -42,7 +42,12 @@
             {
                 <li class="list-group-item">
                     <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">@option.Name</h5>
+                        <h5 class="mb-1">
+                            @if (Model.Decision.ChosenOption == option.Id)
+                            {
+                                <span class="badge bg-success badge-pill">✓</span>
+                            }
+                            @option.Name</h5>
                     </div>
                     <hr/>
                     <div class="row">
@@ -63,10 +68,16 @@
         <table class="table table-bordered">
             <thead class="thead-light">
             <tr>
-                <th scope="col"></th>
+                <th scope="col" class="w-25"></th>
                 @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
                 {
-                    <th>@option.Name</th>
+                    <th>
+                        @option.Name
+                        @if (Model.Decision.ChosenOption == option.Id)
+                        {
+                            <span class="badge bg-success badge-pill">✓</span>
+                        }
+                    </th>
                 }
             </tr>
             </thead>
@@ -78,20 +89,67 @@
                     @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
                     {
                         var comparison = Model.Decision.Comparison[criteria.Id][option.Id];
+                        
                         var className = 
                             comparison.Rating.Rank == Rank.Poor 
                                 ? "background-danger" 
                                 : comparison.Rating.Rank == Rank.Average 
                                     ? "bg-warning" 
                                     : "bg-success";
-                        <td class="@className">@comparison.Rating.Commentary</td>
+                        <td>
+                            @if (comparison.Rating.Rank == Rank.Poor )
+                            {
+                                <span class="badge bg-danger badge-pill">✗</span>
+                            } else if (comparison.Rating.Rank == Rank.Average)
+                            {
+                                <span class="badge bg-warning badge-pill">﹣</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success badge-pill">✓</span>
+                            }
+                            @comparison.Rating.Commentary
+                        </td>
                     }
                 </tr>
             }
             </tbody>
         </table>
     </div>
+
+    <div class="text-left">
+        <h4>Stakeholders</h4>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="row">Name</th>
+                <th scope="row">Role</th>
+                <th scope="row">Socialised</th>
+            </tr>
+            </thead>
+            <tbody>
+            
+            @foreach (var stakeholder in Model.Decision.Stakeholders ?? Enumerable.Empty<Stakeholder>())
+            {
+                <tr>
+                    <th scope="row">@stakeholder.Name</th>
+                    <td>@stakeholder.Role</td>
+                    <td>
+                        @if (stakeholder.Socialised)
+                        {
+                            <span class="badge bg-success badge-pill">✓</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger badge-pill">✗</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
 </div>
+
 <script src="https://cdn.tiny.cloud/1/ooj8w0elph7lqxg57hs9zqsmqzztc6fku86941ux6abhf1lm/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>
@@ -99,7 +157,7 @@
             selector: 'textarea#businessRequirementsViewer',
             readonly : true
         });
-    </script>
-}
+</script>
+
 </body>
 </html>

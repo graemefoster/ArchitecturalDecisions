@@ -8,7 +8,7 @@ class Options extends React.Component {
 
     render() {
 
-        const button = <button type="button" className={'btn btn-block btn-light'} onClick={() => {
+        const button = <button type="button" className={'btn btn-block btn-primary  '} onClick={() => {
             const newId = this.props.options.length === 0 ? 0 : Math.max(...this.props.options.map(x => x.Id)) + 1;
             this.props.onNewOption({Id: newId, Description: '?'});
         }}>New Option</button>

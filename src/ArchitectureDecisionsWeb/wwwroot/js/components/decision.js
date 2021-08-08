@@ -66,6 +66,7 @@ class Decision extends React.Component {
         return (
             <div>
                 <hr/>
+                <ChosenOption options={clonedDecision.Options} chosenOption={clonedDecision.ChosenOption} onChosenOptionChanged={x => this.updateClone(y => y.ChosenOption = x)} />
                 <ReactBootstrap.Tabs defaultActiveKey="criteria" id="uncontrolled-tab-example" className="mb-3">
                     <ReactBootstrap.Tab eventKey="criteria" title="Criteria">
                         <Criteria
@@ -89,7 +90,15 @@ class Decision extends React.Component {
                             onUpdateMatrix={(criteria, option, val) => this.onUpdateMatrix(criteria, option, val)}
                         />
                     </ReactBootstrap.Tab>
+                    <ReactBootstrap.Tab eventKey="stakeholders" title="Stakeholders">
+                        <Stakeholders stakeholders={this.state.decision.Stakeholders}
+                                      onNewStakeholder={x => this.updateClone(c => c.Stakeholders.push(x))}
+                                      onRemoveStakeholder={x => this.removeItemById(this.cloneDecision(), x.Id, x => x.Stakeholders)}
+                                      onUpdateStakeholder={x => this.onUpdateItem(this.cloneDecision(), x, x => x.Stakeholders)}
+                        />
+                    </ReactBootstrap.Tab>
                 </ReactBootstrap.Tabs>
+                <hr/>
 
             </div>
 

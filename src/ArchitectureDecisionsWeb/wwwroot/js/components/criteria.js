@@ -8,7 +8,7 @@ class Criteria extends React.Component {
 
     render() {
 
-        const button = <button type="button" className={'btn btn-block btn-light'} onClick={() => {
+        const button = <button type="button" className={'btn btn-block btn-primary'} onClick={() => {
             const newId = this.props.criteria.length === 0 ? 0 : Math.max(...this.props.criteria.map(x => x.Id)) + 1;
             this.props.onNewCriteria({Id: newId, Description: '?'});
         }}>New Criteria</button>

@@ -13,15 +13,20 @@ namespace ArchitectureDecisionsCore
         public string BusinessRequirements { get; set; } = string.Empty;
         public List<Criteria>? SolutionCriteria { get; set; }
         public List<Option>? Options { get; set; }
+        
+        public List<Stakeholder>? Stakeholders { get; set; }
         public Dictionary<int, Dictionary<int, Comparison>>? Comparison { get; set; }
         public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.Now;
         public DateTimeOffset UpdatedDate { get; set; } = DateTimeOffset.Now;
 
+        public int? ChosenOption { get; set; }
+        
         public void Sanitise()
         {
             SolutionCriteria ??= new List<Criteria>();
             Comparison ??= new Dictionary<int, Dictionary<int, Comparison>>();
             Options ??= new List<Option>();
+            Stakeholders ??= new List<Stakeholder>();
             
             foreach (var criteria in SolutionCriteria)
             {
