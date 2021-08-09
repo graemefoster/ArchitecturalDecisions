@@ -23,8 +23,8 @@
         </div>
 
         <div class="form-group">
-            <label for="problemStatement">Problem Statement </label>
-            <input id="problemStatement" name="problemStatement" type="text" class="form-control" value="@Model.Decision.ProblemStatement" placeholder="Problem Statement">
+            <label for="problemStatementEditor">Problem Statement </label>
+            <textarea id="problemStatementEditor" name="problemStatement">@Model.Decision.ProblemStatement</textarea>
         </div>
 
         <div class="form-group">
@@ -69,6 +69,11 @@
         selector: 'textarea#businessRequirementsEditor',
         menubar: false
     });
+
+    tinymce.init({
+        selector: 'textarea#problemStatementEditor',
+        menubar: false
+    });
     
     window.decision = @Html.Raw(JsonConvert.SerializeObject(Model.Decision));
 
@@ -79,7 +84,7 @@
     $('#saveDecisionForm').submit(function () {
 
         decision.displayName = document.getElementById('displayName').value;
-        decision.problemStatement = document.getElementById('problemStatement').value;
+        decision.problemStatement = tinymce.get('problemStatementEditor').getContent();
         decision.businessRequirements = tinymce.get("businessRequirementsEditor").getContent();
         decision.happySave = null;
 
