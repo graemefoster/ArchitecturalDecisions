@@ -14,19 +14,24 @@
 <div class="container">
 
     <div class="text-left">
-        <h2>@Html.Raw(Model.Decision.DisplayName)</h2>
+        <h1>@Html.Raw(Model.Decision.DisplayName)</h1>
     </div>
 
     <div class="text-left">
+        <h2>Problem Statement</h2>
         <p>@Model.Decision.ProblemStatement</p>
     </div>
     <hr>
     <div class="text-left">
+        <h2>Business Requirements</h2>
         @Html.Raw(Model.Decision.BusinessRequirements)
     </div>
     <hr/>
     <div class="text-left">
-        <h4>Criteria</h4>
+        <h4>Decision Criteria</h4>
+        <p>
+            Each option will be rated against these criteria.
+        </p>
         <ul class="list-group-flush">
             @foreach (var criteria in Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>())
             {
@@ -138,10 +143,6 @@
                         @if (stakeholder.Socialised)
                         {
                             <span class="badge bg-success badge-pill">✓</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-danger badge-pill">✗</span>
                         }
                     </td>
                 </tr>
