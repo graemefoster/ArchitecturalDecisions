@@ -28,7 +28,7 @@
     </div>
     <hr/>
     <div class="text-left">
-        <h4>Decision Criteria</h4>
+        <h2>Decision Criteria</h2>
         <p>
             Each option will be rated against these criteria.
         </p>
@@ -41,31 +41,26 @@
     </div>
     <hr/>
     <div class="text-left">
-        <h4>Options</h4>
-        <ul class="list-group">
-            @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
-            {
-                <li class="list-group-item">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">
-                            @if (Model.Decision.ChosenOption == option.Id)
-                            {
-                                <span class="badge bg-success badge-pill">✓</span>
-                            }
-                            @option.Name</h5>
-                    </div>
-                    <hr/>
-                    <div class="row">
-                        <div class="col-4">
-                            @Html.Raw(option.Description)
-                        </div>
-                        <div class="col-8">
-                            @Html.Raw(option.Diagram)
-                        </div>
-                    </div>
-                </li>
-            }
-        </ul>
+        <h2>Options</h2>
+        @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
+        {
+            <h3 class="mb-1">
+                @if (Model.Decision.ChosenOption == option.Id)
+                {
+                    <span class="badge bg-success badge-pill">✓</span>
+                }
+                @option.Name
+            </h3>
+            <div class="row">
+                <div class="col-4">
+                    @Html.Raw(option.Description)
+                </div>
+                <div class="col-8">
+                    @Html.Raw(option.Diagram)
+                </div>
+            </div>
+            <hr/>
+        }
     </div>
     <hr/>
     <div class="text-left">
@@ -94,18 +89,19 @@
                     @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
                     {
                         var comparison = Model.Decision.Comparison[criteria.Id][option.Id];
-                        
-                        var className = 
-                            comparison.Rating.Rank == Rank.Poor 
-                                ? "background-danger" 
-                                : comparison.Rating.Rank == Rank.Average 
-                                    ? "bg-warning" 
+
+                        var className =
+                            comparison.Rating.Rank == Rank.Poor
+                                ? "background-danger"
+                                : comparison.Rating.Rank == Rank.Average
+                                    ? "bg-warning"
                                     : "bg-success";
                         <td>
-                            @if (comparison.Rating.Rank == Rank.Poor )
+                            @if (comparison.Rating.Rank == Rank.Poor)
                             {
                                 <span class="badge bg-danger badge-pill">✗</span>
-                            } else if (comparison.Rating.Rank == Rank.Average)
+                            }
+                            else if (comparison.Rating.Rank == Rank.Average)
                             {
                                 <span class="badge bg-warning badge-pill">﹣</span>
                             }
@@ -133,7 +129,7 @@
             </tr>
             </thead>
             <tbody>
-            
+
             @foreach (var stakeholder in Model.Decision.Stakeholders ?? Enumerable.Empty<Stakeholder>())
             {
                 <tr>
