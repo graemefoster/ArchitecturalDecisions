@@ -109,7 +109,6 @@
 
     <script type="text/babel">
         const domContainer = document.querySelector('#decision_container');
-        console.log(decision);
         ReactDOM.render(<ErrorBoundary><Decision decision={decision} onUpdate={x => updateDecision(x)} /></ErrorBoundary>, domContainer);
     </script>
 

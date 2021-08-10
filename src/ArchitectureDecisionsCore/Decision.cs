@@ -27,9 +27,15 @@ namespace ArchitectureDecisionsCore
             Comparison ??= new Dictionary<int, Dictionary<int, Comparison>>();
             Options ??= new List<Option>();
             Stakeholders ??= new List<Stakeholder>();
-            
+
+            var index = 0;
             foreach (var criteria in SolutionCriteria)
             {
+                if (criteria.Index == null)
+                {
+                    criteria.Index = index++;
+                }
+                
                 if (!Comparison.ContainsKey(criteria.Id))
                 {
                     Comparison[criteria.Id] = new Dictionary<int, Comparison>();
@@ -44,6 +50,8 @@ namespace ArchitectureDecisionsCore
                     }
                 }
             }
+
+            SolutionCriteria = SolutionCriteria.OrderBy(x => x.Index).ToList();
         }
     }
 }

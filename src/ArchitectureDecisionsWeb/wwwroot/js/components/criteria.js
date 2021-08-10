@@ -20,9 +20,21 @@ class Criteria extends React.Component {
             </div>;
         }
 
-        const criteria = this.props.criteria.map(x => (
+        console.log(this.props.criteria.map(x => ({id: x.Id, index: x.Index})));
+
+        const criteria = this.props.criteria.map((x, idx) => (
             <li key={x.Id} className={'list-group-item'}>
                 <div className={'form-row'}>
+                    <div className={'col-1'}>
+                        <button type={'button'} disabled={idx === 0} className={'btn btn-primary btn-sm mb-2'} onClick={() => {
+                            this.props.onMoveUp(x);
+                        }}>↑
+                        </button>&nbsp;
+                        <button type={'button'} disabled={idx === this.props.criteria.length - 1} className={'btn btn-primary btn-sm mb-2'} onClick={() => {
+                            this.props.onMoveDown(x);
+                        }}>↓
+                        </button>
+                    </div>
                     <label className={'col-form-label'}>Criteria</label>
                     <div className={'col'}>
                         <input className={'form-control'} type="text" value={x.Description} onChange={evt => {

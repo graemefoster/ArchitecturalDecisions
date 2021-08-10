@@ -59,10 +59,37 @@ class Decision extends React.Component {
         }));
     }
 
+    raiseCriteria(criteria) {
+        this.updateClone(clone => {
+            let indexOfThis = clone.SolutionCriteria.findIndex(x => x.Id === criteria.Id);
+            let toSwitch = clone.SolutionCriteria[indexOfThis];
+            let other = clone.SolutionCriteria[indexOfThis - 1];
+            let toSwitchIndex = toSwitch.Index;
+            toSwitch.Index = other.Index;
+            other.Index = toSwitchIndex;
+            clone.SolutionCriteria[toSwitchIndex] = other;
+            clone.SolutionCriteria[toSwitchIndex - 1] = toSwitch;
+        })
+    }
+
+    lowerCriteria(criteria) {
+        this.updateClone(clone => {
+            let indexOfThis = clone.SolutionCriteria.findIndex(x => x.Id === criteria.Id);
+            let toSwitch = clone.SolutionCriteria[indexOfThis];
+            let other = clone.SolutionCriteria[indexOfThis + 1];
+            let toSwitchIndex = toSwitch.Index;
+            toSwitch.Index = other.Index;
+            other.Index = toSwitchIndex;
+            clone.SolutionCriteria[toSwitchIndex] = other;
+            clone.SolutionCriteria[toSwitchIndex + 1] = toSwitch;
+        })
+    }
+
     render() {
         
         const clonedDecision = JSON.parse(JSON.stringify(this.state.decision))
-
+        clonedDecision.SolutionCriteria.sort(x => x.Index);
+        
         return (
             <div>
                 <hr/>
@@ -71,6 +98,8 @@ class Decision extends React.Component {
                     <ReactBootstrap.Tab eventKey="criteria" title="Criteria">
                         <Criteria
                             criteria={clonedDecision.SolutionCriteria}
+                            onMoveUp={x => this.raiseCriteria(x)}
+                            onMoveDown={x => this.lowerCriteria(x)}
                             onNewCriteria={x => this.updateClone(c => c.SolutionCriteria.push(x))}
                             onRemoveCriteria={x => this.removeItemById(this.cloneDecision(), x.Id, x => x.SolutionCriteria)}
                             onUpdateCriteria={x => this.onUpdateItem(this.cloneDecision(), x, x => x.SolutionCriteria)}/>

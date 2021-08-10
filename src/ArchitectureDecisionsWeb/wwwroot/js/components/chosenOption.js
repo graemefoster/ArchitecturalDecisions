@@ -17,7 +17,7 @@ class ChosenOption extends React.Component {
                 <label htmlFor="chosenOption">Chosen Option</label>
                 <select name="chosenOption" value={this.props.chosenOption} className={'form-select'} onChange={x => this.props.onChosenOptionChanged(x.target.value)}>
                     <option value="" />
-                    {this.props.options.map(x => (<option value={x.Id}>{x.Name}</option>))}
+                    {this.props.options.map(x => (<option key={x.Id} value={x.Id}>{x.Name}</option>))}
                 </select>
             </div>
         );
