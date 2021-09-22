@@ -10,7 +10,6 @@ namespace ArchitectureDecisionsCore
         public Guid Id { get; set; } = Guid.NewGuid();
         public string DisplayName { get; set; } = string.Empty;
         public string ProblemStatement { get; set; } = string.Empty;
-        public string BusinessRequirements { get; set; } = string.Empty;
         public List<Criteria>? SolutionCriteria { get; set; }
         public List<Option>? Options { get; set; }
         
@@ -21,7 +20,7 @@ namespace ArchitectureDecisionsCore
 
         public int? ChosenOption { get; set; }
         
-        public void Sanitise()
+        public Decision Sanitise()
         {
             SolutionCriteria ??= new List<Criteria>();
             Comparison ??= new Dictionary<int, Dictionary<int, Comparison>>();
@@ -29,12 +28,9 @@ namespace ArchitectureDecisionsCore
             Stakeholders ??= new List<Stakeholder>();
 
             var index = 0;
-            foreach (var criteria in SolutionCriteria)
+            foreach (var criteria in SolutionCriteria.OrderBy(x => x.Index))
             {
-                if (criteria.Index == null)
-                {
-                    criteria.Index = index++;
-                }
+                criteria.Index = index++;
                 
                 if (!Comparison.ContainsKey(criteria.Id))
                 {
@@ -52,6 +48,8 @@ namespace ArchitectureDecisionsCore
             }
 
             SolutionCriteria = SolutionCriteria.OrderBy(x => x.Index).ToList();
+
+            return this;
         }
     }
 }

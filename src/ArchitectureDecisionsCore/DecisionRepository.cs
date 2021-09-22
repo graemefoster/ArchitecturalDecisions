@@ -34,7 +34,92 @@ namespace ArchitectureDecisionsCore
 
         public Decision New()
         {
-            return new();
+            return new Decision()
+            {
+                DisplayName = "New Decision",
+                SolutionCriteria = new List<Criteria>()
+                {
+                    new()
+                    {
+                        Id = 1,
+                        Description = "Cost Optimisation",
+                        Index = 1,
+                    },
+                    new()
+                    {
+                        Id = 2,
+                        Description = "Operations",
+                        Index = 2,
+                    },
+                    new()
+                    {
+                        Id = 3,
+                        Description = "Performance",
+                        Index = 3,
+                    },
+                    new()
+                    {
+                        Id = 4,
+                        Description = "Reliability",
+                        Index = 4,
+                    },
+                    new()
+                    {
+                        Id = 5,
+                        Description = "Security",
+                        Index = 5,
+                    },
+                },
+                Stakeholders = new List<Stakeholder>()
+                {
+                    new()
+                    {
+                        Id = 1,
+                        Role = "Security"
+                    },
+                    new()
+                    {
+                        Id = 2,
+                        Role = "Networks"
+                    },
+                    new()
+                    {
+                        Id = 3,
+                        Role = "Risk"
+                    },
+                    new()
+                    {
+                        Id = 4,
+                        Role = "Operations"
+                    },
+                    new()
+                    {
+                        Id = 5,
+                        Role = "Delivery"
+                    },
+                },
+                Options = new List<Option>()
+                {
+                    new Option()
+                    {
+                        Name = "Option 1",
+                        Id = 1,
+                        Diagram = ""
+                    },
+                    new Option()
+                    {
+                        Name = "Option 2",
+                        Id = 2,
+                        Diagram = ""
+                    },
+                    new Option()
+                    {
+                        Name = "Option 3",
+                        Id = 3,
+                        Diagram = ""
+                    },
+                }
+            }.Sanitise();
         }
 
         public async Task<Decision> Save(Decision decision)

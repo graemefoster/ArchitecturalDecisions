@@ -27,10 +27,6 @@
             <textarea id="problemStatementEditor" name="problemStatement">@Model.Decision.ProblemStatement</textarea>
         </div>
 
-        <div class="form-group">
-            <label for="businessRequirementsEditor">Business Requirements </label>
-            <textarea id="businessRequirementsEditor" name="businessRequirements">@Model.Decision.BusinessRequirements</textarea>
-        </div>
 
         <div id="decision_container"></div>
 
@@ -83,26 +79,31 @@
         
     $('#saveDecisionForm').submit(function () {
 
-        decision.displayName = document.getElementById('displayName').value;
-        decision.problemStatement = tinymce.get('problemStatementEditor').getContent();
-        decision.businessRequirements = tinymce.get("businessRequirementsEditor").getContent();
-        decision.happySave = null;
-
-        document.getElementById('saveButton').disabled = true;
-        $.post(
-            '@Url.Action("Execute", "SaveDecisionApi", new {id = Model.Decision.Id})', 
-            JSON.stringify(window.decision),
-            function (data, status, xhr) {
-                document.getElementById('saveButton').disabled = false;
-                let btnClass = status === 'success' ? 'btn-success' : 'btn-danger';
-                document.getElementById('saveButton').className = `btn ${btnClass}`;
-                window.setTimeout(function () {
-                    document.getElementById('saveButton').className = 'btn btn-primary';
-                }, 2000);
-            },
-            'json');
         
-        return false;
+        try {
+            decision.displayName = document.getElementById('displayName').value;
+            decision.problemStatement = tinymce.get('problemStatementEditor').getContent();
+            decision.happySave = null;
+    
+            document.getElementById('saveButton').disabled = true;
+            $.post(
+                '@Url.Action("Execute", "SaveDecisionApi", new { id = Model.Decision.Id })', 
+                JSON.stringify(window.decision),
+                function (data, status, xhr) {
+                    document.getElementById('saveButton').disabled = false;
+                    let btnClass = status === 'success' ? 'btn-success' : 'btn-danger';
+                    document.getElementById('saveButton').className = `btn ${btnClass}`;
+                    window.setTimeout(function () {
+                        document.getElementById('saveButton').className = 'btn btn-primary';
+                    }, 2000);
+                },
+                'json');
+            
+        } catch (e) {
+            console.log(e);
+        } finally {
+            return false;
+        }
 
     });
     </script>

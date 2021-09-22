@@ -21,11 +21,6 @@
         <h2>Problem Statement</h2>
         @Html.Raw(Model.Decision.ProblemStatement)
     </div>
-    <hr>
-    <div class="text-left">
-        <h2>Business Requirements</h2>
-        @Html.Raw(Model.Decision.BusinessRequirements)
-    </div>
     <hr/>
     <div class="text-left">
         <h2>Decision Criteria</h2>
@@ -88,7 +83,7 @@
                     <th scope="row">@criteria.Description</th>
                     @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
                     {
-                        var comparison = Model.Decision.Comparison[criteria.Id][option.Id];
+                        var comparison = Model.Decision.Comparison![criteria.Id][option.Id];
 
                         var className =
                             comparison.Rating.Rank == Rank.Poor

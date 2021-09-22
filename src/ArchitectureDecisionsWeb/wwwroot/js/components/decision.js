@@ -61,6 +61,12 @@ class Decision extends React.Component {
 
     raiseCriteria(criteria) {
         this.updateClone(clone => {
+            
+            //re-index everything
+            let ordered = clone.SolutionCriteria.sort((x,y) => x.Index < y.Index);
+            var currentIndex = 0;
+            ordered.forEach(x => x.Index = currentIndex++);
+            
             let indexOfThis = clone.SolutionCriteria.findIndex(x => x.Id === criteria.Id);
             let toSwitch = clone.SolutionCriteria[indexOfThis];
             let other = clone.SolutionCriteria[indexOfThis - 1];
@@ -74,6 +80,11 @@ class Decision extends React.Component {
 
     lowerCriteria(criteria) {
         this.updateClone(clone => {
+
+            let ordered = clone.SolutionCriteria.sort((x,y) => x.Index < y.Index);
+            var currentIndex = 0;
+            ordered.forEach(x => x.Index = currentIndex++);
+
             let indexOfThis = clone.SolutionCriteria.findIndex(x => x.Id === criteria.Id);
             let toSwitch = clone.SolutionCriteria[indexOfThis];
             let other = clone.SolutionCriteria[indexOfThis + 1];
@@ -94,7 +105,14 @@ class Decision extends React.Component {
             <div>
                 <hr/>
                 <ChosenOption options={clonedDecision.Options} chosenOption={clonedDecision.ChosenOption} onChosenOptionChanged={x => this.updateClone(y => y.ChosenOption = x)} />
-                <ReactBootstrap.Tabs defaultActiveKey="criteria" id="uncontrolled-tab-example" className="mb-3">
+                <ReactBootstrap.Tabs defaultActiveKey="stakeholders" id="uncontrolled-tab-example" className="mb-3">
+                    <ReactBootstrap.Tab eventKey="stakeholders" title="Stakeholders">
+                        <Stakeholders stakeholders={this.state.decision.Stakeholders}
+                                      onNewStakeholder={x => this.updateClone(c => c.Stakeholders.push(x))}
+                                      onRemoveStakeholder={x => this.removeItemById(this.cloneDecision(), x.Id, x => x.Stakeholders)}
+                                      onUpdateStakeholder={x => this.onUpdateItem(this.cloneDecision(), x, x => x.Stakeholders)}
+                        />
+                    </ReactBootstrap.Tab>
                     <ReactBootstrap.Tab eventKey="criteria" title="Criteria">
                         <Criteria
                             criteria={clonedDecision.SolutionCriteria}
@@ -117,13 +135,6 @@ class Decision extends React.Component {
                             criteria={clonedDecision.SolutionCriteria}
                             comparisons={clonedDecision.Comparison}
                             onUpdateMatrix={(criteria, option, val) => this.onUpdateMatrix(criteria, option, val)}
-                        />
-                    </ReactBootstrap.Tab>
-                    <ReactBootstrap.Tab eventKey="stakeholders" title="Stakeholders">
-                        <Stakeholders stakeholders={this.state.decision.Stakeholders}
-                                      onNewStakeholder={x => this.updateClone(c => c.Stakeholders.push(x))}
-                                      onRemoveStakeholder={x => this.removeItemById(this.cloneDecision(), x.Id, x => x.Stakeholders)}
-                                      onUpdateStakeholder={x => this.onUpdateItem(this.cloneDecision(), x, x => x.Stakeholders)}
                         />
                     </ReactBootstrap.Tab>
                 </ReactBootstrap.Tabs>

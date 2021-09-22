@@ -49,7 +49,17 @@ class Options extends React.Component {
                             }}/>
                     </div>
                     <div className={'col-4'}>
-                        <label>SVG</label>
+                        {/*<div className={'row'}>*/}
+                        {/*    <ul className={'list-inline'}>*/}
+                        {/*        <li>*/}
+                        {/*            <button type={'button'} className={'btn btn-primary'}>HTML <b>Not filtered</b></button>*/}
+                        {/*        </li>*/}
+                        {/*        <li>*/}
+                        {/*            <button type={'button'} className={'btn btn-primary'}>Preview</button>*/}
+                        {/*        </li>*/}
+                        {/*    </ul>*/}
+                        {/*</div>*/}
+                        <label>HTML <b>Not filtered on print view</b></label>
                         <textarea rows={7} className={'form-control'} value={x.Diagram || ''} onChange={evt => {
                             x.Diagram = evt.target.value || ''
                             this.props.onUpdateOption(x);
