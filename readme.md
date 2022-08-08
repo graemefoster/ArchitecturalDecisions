@@ -34,43 +34,10 @@ against the criteria, then you've identified a need for more conversation.
 
 A matrix is a good way to present this section. Using color (TODO red / green colour blind) can help draw attention to options that are rated better than others.
 
-<style>
-    .decisionMatrix {
-        width: 70%;
-        text-align: center;
-    }
-    .decisionMatrix th {
-        background: grey;
-        word-wrap: break-word;
-        text-align: center;
-    }
-
-    .decisionMatrix tr td:nth-child(1) { color: white; }
-    .decisionMatrix tr { color: black; }
-
-    .decisionMatrix tr:nth-child(1) td:nth-child(2) { background: green; }
-    .decisionMatrix tr:nth-child(1) td:nth-child(3) { background: yellow; }
-    .decisionMatrix tr:nth-child(1) td:nth-child(4) { background: red; }
-
-    .decisionMatrix tr:nth-child(2) td:nth-child(2) { background: green; }
-    .decisionMatrix tr:nth-child(2) td:nth-child(3) { background: green; }
-    .decisionMatrix tr:nth-child(2) td:nth-child(4) { background: yellow; }
-
-    .decisionMatrix tr:nth-child(3) td:nth-child(2) { background: red; }
-    .decisionMatrix tr:nth-child(3) td:nth-child(3) { background: green; }
-    .decisionMatrix tr:nth-child(3) td:nth-child(4) { background: green; }
-
-</style>
-
-<div class="decisionMatrix">
 
 | Criteria               | Option 1 | Option 2 | Option 3 |
 |------------------------|----------|----------|----------|
 | Cost                   | Good     | Medium   | Bad      |
 | Ease of operation      | Good     | Good     | Medium   |
 | Ability to find skills | Bad      | Good     | Good     |
-
-</div>
-
-
 
