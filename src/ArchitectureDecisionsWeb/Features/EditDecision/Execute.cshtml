@@ -85,7 +85,7 @@
             decision.problemStatement = tinymce.get('problemStatementEditor').getContent();
             decision.happySave = null;
     
-            document.getElementById('saveButton').disabled = true;
+            //document.getElementById('saveButton').disabled = true;
             $.post(
                 '@Url.Action("Execute", "SaveDecisionApi", new { id = Model.Decision.Id })', 
                 JSON.stringify(window.decision),
