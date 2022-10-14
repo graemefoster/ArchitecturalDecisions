@@ -24,7 +24,7 @@ class Matrix extends React.Component {
                             const option = this.props.comparisons[criteria.Id];
                             let comparison = option[x.Id]
                             if (!comparison) {
-                                option[x.Id] = {Rating: {Commentary: '', Rank: 1}}
+                                option[x.Id] = {Rating: {Commentary: '', Rank: 3}}
                                 comparison = option[x.Id]
                             }
                             const key = `${criteria.Id}-${x.Id}`
@@ -37,6 +37,8 @@ class Matrix extends React.Component {
                                         return 'bg-danger';
                                     case 1 :
                                         return 'bg-warning';
+                                    case 3 :
+                                        return '';
                                     default:
                                         return 'bg-success';
                                 }
@@ -59,6 +61,7 @@ class Matrix extends React.Component {
                                             <option value="0">Poor</option>
                                             <option value="1">Average</option>
                                             <option value="2">Good</option>
+                                            <option value="3">Unknown</option>
                                         </ReactBootstrap.Form.Select>
                                     </div>
                                 </div>

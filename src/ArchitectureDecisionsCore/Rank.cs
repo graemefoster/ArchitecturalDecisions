@@ -4,6 +4,7 @@
     {
         Poor = 0,
         Average = 1,
-        Good = 2
+        Good = 2,
+        Unknown = 3
     }
 }

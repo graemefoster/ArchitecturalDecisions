@@ -3,6 +3,6 @@
     public class Rating
     {
         public string Commentary { get; set; } = string.Empty;
-        public Rank Rank { get; set; } = Rank.Average;
+        public Rank Rank { get; set; } = Rank.Unknown;
     }
 }
