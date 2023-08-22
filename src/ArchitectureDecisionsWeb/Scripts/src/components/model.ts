@@ -7,7 +7,7 @@ export interface DecisionModel{
     ProblemStatement: string
     SolutionCriteria: CriteriaModel[]
     Options: OptionModel[]
-    Comparison: ComparisonModel[][]
+    Comparison: Record<number, Record<number, ComparisonModel>>
     ChosenOption: number
     Stakeholders: StakeholderModel[]
 }
@@ -20,6 +20,7 @@ export interface StakeholderModel {
 }
 
 export interface ComparisonModel {
+    OptionId: number //unused now.
     Rating: RatingModel
 }
 

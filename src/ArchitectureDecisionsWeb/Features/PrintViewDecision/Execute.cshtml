@@ -35,8 +35,9 @@
                 <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition))</dd>
             }
         </dl>
-        <h4>Secondary Criteria</h4>
-        <dl class="row">
+        <hr />
+        <h5>Secondary Criteria</h5>
+        <dl class="row" style="font-size: smaller">
             @foreach (var criteria in (Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>()).Where(x => !x.IsPrimary))
             {
                 <dt class="col-sm-3">@criteria.Description</dt>
@@ -58,7 +59,7 @@
             </h3>
             <div class="row">
                 <div class="col-4">
-                    @Html.Raw(option.Description)
+                    @Html.Raw(Markdig.Markdown.ToHtml(option.Description))
                 </div>
                 <div class="col-8">
                     @Html.Raw(option.Diagram)
@@ -69,12 +70,13 @@
     </div>
     <hr/>
     <div class="text-left">
-        <h4>Comparison</h4>
-        <h5>Primary Criteria</h5>
+        <h4>Primary Criteria Comparison</h4>
         @await Html.PartialAsync("ComparisonView", new Tuple<Decision, bool>(Model.Decision, true))
         <hr/>
-        <h5>Supplementary Criteria</h5>
-        @await Html.PartialAsync("ComparisonView", new Tuple<Decision, bool>(Model.Decision, false))
+        <h5>Supplementary Criteria Comparison</h5>
+        <div style="font-size: 0.5em">
+            @await Html.PartialAsync("ComparisonView", new Tuple<Decision, bool>(Model.Decision, false))
+        </div>
     </div>
 
     <div class="text-left">

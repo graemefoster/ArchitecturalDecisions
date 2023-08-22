@@ -8,7 +8,7 @@ export interface MatrixProps {
     options: OptionModel[]
     criteria: CriteriaModel[]
     onUpdateMatrix: (criteriaId: number, optionId: number, val: { Commentary: string, Rank: number }) => void
-    comparisons: ComparisonModel[][]
+    comparisons: Record<number, Record<number, ComparisonModel>>
 }
 
 export class Matrix extends React.Component<MatrixProps> {
@@ -35,7 +35,8 @@ export class Matrix extends React.Component<MatrixProps> {
                             const option = this.props.comparisons[criteria.Id];
                             let comparison = option[x.Id]
                             if (!comparison) {
-                                option[x.Id] = {Rating: {Commentary: '', Rank: 3}}
+                                console.log('New comparison:' + x.Id)
+                                option[x.Id] = {OptionId: x.Id, Rating: {Commentary: '', Rank: 3}}
                                 comparison = option[x.Id]
                             }
                             const key = `${criteria.Id}-${x.Id}`

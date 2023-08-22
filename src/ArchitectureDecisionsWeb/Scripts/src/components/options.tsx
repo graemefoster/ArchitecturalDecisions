@@ -2,6 +2,7 @@
 
 import {OptionModel} from "./model";
 import React from "react";
+import {  } from "react-bootstrap"
 
 export interface OptionsProps {
     options: OptionModel[]
@@ -49,9 +50,13 @@ export class Options extends React.Component<OptionsProps> {
                 </div>
                 <div className={'form-row'}>
                     <div className={'col-8'}>
-                        <label>Description</label>
+                        <label
+                            style={{'verticalAlign': 'top'}}>
+                            Description
+                        </label>
                         <textarea 
                             value={x.Description || ''}
+                            className={'form-control'}
                             rows={8}
                             cols={50}
                             onChange={evt => {

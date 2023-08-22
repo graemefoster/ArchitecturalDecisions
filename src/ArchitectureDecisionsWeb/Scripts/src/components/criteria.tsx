@@ -75,10 +75,14 @@ export class Criteria extends React.Component<CriteriaProps> {
                         }}>Delete
                         </button>
                     </div>
-                    <label className={'col-form-label'}>Criteria Definition</label>
+                    <label className={'col-form-label'}
+                           style={{'verticalAlign': 'top'}}>
+                        Definition
+                    </label>
                     <div className={'col'}>
                         <textarea
                             value={ x.Definition || ''}
+                            className={'form-control'}
                             rows={7}
                             cols={100}
                             onChange={evt => {

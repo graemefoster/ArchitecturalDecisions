@@ -4,10 +4,11 @@ import * as React from "react";
 import * as ReactBootstrap from "react-bootstrap";
 import {Criteria} from "./criteria";
 import {ChosenOption} from "./chosenOption";
-import {CriteriaModel, DecisionModel, RatingModel, WithId} from "./model";
+import {ComparisonModel, CriteriaModel, DecisionModel, RatingModel, WithId} from "./model";
 import {Stakeholders} from "./stakeholders";
 import {Options} from "./options";
 import {Matrix} from "./matrix";
+
 interface DecisionState {
     decision: DecisionModel;
     undoBuffer: DecisionModel[];
@@ -68,16 +69,18 @@ export class Decision extends React.Component<DecisionProps, DecisionState> {
     }
 
     sanitiseDecision(decision: DecisionModel) {
-        decision.SolutionCriteria.forEach(criteria => decision.Options.forEach(option => {
-            let comparisonCriteria = decision.Comparison[criteria.Id]
-            if (!comparisonCriteria) {
-                decision.Comparison[criteria.Id] = []
-            }
-            let optionCriteria = decision.Comparison[criteria.Id][option.Id]
-            if (!optionCriteria) {
-                decision.Comparison[criteria.Id][option.Id] = {Rating: {Commentary: '', Rank: 1}}
-            }
-        }));
+        decision.SolutionCriteria.forEach(criteria => {
+            decision.Options.forEach(option => {
+                let comparisonCriteria = decision.Comparison[criteria.Id]
+                if (!comparisonCriteria) {
+                    decision.Comparison[criteria.Id] = {}
+                }
+                let optionCriteria = decision.Comparison[criteria.Id][option.Id]
+                if (optionCriteria === undefined) {
+                    decision.Comparison[criteria.Id][option.Id] = {OptionId: option.Id, Rating: {Commentary: '', Rank: 1}}
+                }
+            })
+        })
     }
 
     raiseCriteria(criteria: CriteriaModel) {
@@ -114,7 +117,7 @@ export class Decision extends React.Component<DecisionProps, DecisionState> {
             other.Index = toSwitchIndex;
             clone.SolutionCriteria[toSwitchIndex] = other;
             clone.SolutionCriteria[toSwitchIndex + 1] = toSwitch;
-            
+
             console.log(clone.SolutionCriteria)
         })
     }
@@ -131,6 +134,7 @@ export class Decision extends React.Component<DecisionProps, DecisionState> {
                     <label htmlFor="displayName">Display Name</label>
                     <input type="text" className="form-control"
                            value={clonedDecision.DisplayName} placeholder="Decision Display Name"
+                           id={'displayName'}
                            onChange={evt => {
                                this.updateClone(x => x.DisplayName = evt.target.value)
                            }}
@@ -138,9 +142,14 @@ export class Decision extends React.Component<DecisionProps, DecisionState> {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="problemStatementEditor">Problem Statement </label>
+                    <label htmlFor="problemStatementEditor"
+                           style={{'verticalAlign': 'top'}}>
+                        Problem Statement
+                    </label>
                     <textarea
                         value={this.state.decision.ProblemStatement}
+                        id={'problemStatementEditor'}
+                        className={'form-control'}
                         rows={8}
                         cols={100}
                         onChange={evt => {

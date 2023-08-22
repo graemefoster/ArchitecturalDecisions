@@ -40,10 +40,17 @@ namespace ArchitectureDecisionsCore
                 var comparison = Comparison[criteria.Id];
                 foreach (var option in Options)
                 {
-                    if (!comparison.ContainsKey(option.Id))
-                    {
-                        comparison[option.Id] = new Comparison();
-                    }
+                    comparison.TryAdd(option.Id, new Comparison());
+                }
+            }
+
+            var allOptionIds = Options.Select(x => x.Id).ToArray();
+            foreach (var comparison in Comparison)
+            {
+                var comparisonsWithoutAnOption = comparison.Value.Keys.Except(allOptionIds);
+                foreach (var missingOption in comparisonsWithoutAnOption)
+                {
+                    comparison.Value.Remove(missingOption);
                 }
             }
 
