@@ -52,6 +52,8 @@ export class Options extends React.Component<OptionsProps> {
                         <label>Description</label>
                         <textarea 
                             value={x.Description || ''}
+                            rows={8}
+                            cols={50}
                             onChange={evt => {
                                 x.Description = evt.target.value
                                 this.props.onUpdateOption(x);
