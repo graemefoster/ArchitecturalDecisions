@@ -4,12 +4,10 @@ import * as React from "react";
 import * as ReactBootstrap from "react-bootstrap";
 import {Criteria} from "./criteria";
 import {ChosenOption} from "./chosenOption";
-import {CriteriaModel, DecisionModel, RatingModel, tinyApiKey, WithId} from "./model";
+import {CriteriaModel, DecisionModel, RatingModel, WithId} from "./model";
 import {Stakeholders} from "./stakeholders";
 import {Options} from "./options";
 import {Matrix} from "./matrix";
-import {Editor} from "@tinymce/tinymce-react";
-
 interface DecisionState {
     decision: DecisionModel;
     undoBuffer: DecisionModel[];

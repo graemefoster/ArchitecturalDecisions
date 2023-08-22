@@ -1,8 +1,7 @@
 ﻿'use strict';
 
-import {OptionModel, tinyApiKey} from "./model";
+import {OptionModel} from "./model";
 import React from "react";
-import {Editor } from '@tinymce/tinymce-react'
 
 export interface OptionsProps {
     options: OptionModel[]
@@ -51,12 +50,10 @@ export class Options extends React.Component<OptionsProps> {
                 <div className={'form-row'}>
                     <div className={'col-8'}>
                         <label>Description</label>
-                        <Editor 
+                        <textarea 
                             value={x.Description || ''}
-                            apiKey={tinyApiKey}
-                            init={{ menubar: false }}
-                            onEditorChange={evt => {
-                                x.Description = evt
+                            onChange={evt => {
+                                x.Description = evt.target.value
                                 this.props.onUpdateOption(x);
                             }}/>
                     </div>

@@ -42,5 +42,3 @@ export interface OptionModel {
     Description: string
     Diagram: string
 }
-
-export const tinyApiKey = 'ooj8w0elph7lqxg57hs9zqsmqzztc6fku86941ux6abhf1lm'
