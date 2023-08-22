@@ -88,4 +88,8 @@
       <Folder Include="wwwroot\assets\" />
     </ItemGroup>
     
+    <Target Name="BuildReactPage" BeforeTargets="Build">
+      <Exec Command="vite build ./scripts" />
+    </Target>   
+    
 </Project>
