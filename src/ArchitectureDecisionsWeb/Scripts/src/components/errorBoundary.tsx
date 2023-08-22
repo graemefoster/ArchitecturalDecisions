@@ -1,15 +1,22 @@
 ﻿'use strict';
-class ErrorBoundary extends React.Component {
-    constructor(props) {
+
+import React , {PropsWithChildren} from "react";
+
+interface ErrorBoundaryState {
+    hasError: boolean;
+}
+
+export class ErrorBoundary extends React.Component<PropsWithChildren, ErrorBoundaryState> {
+    constructor(props: PropsWithChildren) {
         super(props);
         this.state = { hasError: false };
     }
 
-    static getDerivedStateFromError(error) {
+    static getDerivedStateFromError(error: any) {
         return { hasError: true };
     }
 
-    componentDidCatch(error, errorInfo) {
+    componentDidCatch(error: any, errorInfo: any) {
         console.log(error);
         console.log(errorInfo);
     }

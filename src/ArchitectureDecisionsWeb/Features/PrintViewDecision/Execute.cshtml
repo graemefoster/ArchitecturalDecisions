@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="~/css/site.css"/>
 </head>
 <body>
-<div class="container">
+<div class="container-lg">
 
     <div class="text-left">
         <h1>@Html.Raw(Model.Decision.DisplayName)</h1>
@@ -19,20 +19,30 @@
 
     <div class="text-left">
         <h2>Problem Statement</h2>
-        @Html.Raw(Model.Decision.ProblemStatement)
+        @Html.Raw(Markdig.Markdown.ToHtml(Model.Decision.ProblemStatement))
     </div>
     <hr/>
     <div class="text-left">
         <h2>Decision Criteria</h2>
         <p>
-            Each option will be rated against these criteria.
+            Each option will be rated against these criteria. The criteria are ordered by their importance to the outcome.
         </p>
-        <ul class="list-group-flush">
-            @foreach (var criteria in Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>())
+        <h4>Primary Criteria</h4>
+        <dl class="row">
+            @foreach (var criteria in (Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>()).Where(x => x.IsPrimary))
             {
-                <li class="list-group-item">@criteria.Description</li>
+                <dt class="col-sm-3">@criteria.Description</dt>
+                <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition))</dd>
             }
-        </ul>
+        </dl>
+        <h4>Secondary Criteria</h4>
+        <dl class="row">
+            @foreach (var criteria in (Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>()).Where(x => !x.IsPrimary))
+            {
+                <dt class="col-sm-3">@criteria.Description</dt>
+                <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition))</dd>
+            }
+        </dl>
     </div>
     <hr/>
     <div class="text-left">
@@ -60,61 +70,11 @@
     <hr/>
     <div class="text-left">
         <h4>Comparison</h4>
-        <table class="table table-bordered">
-            <thead class="thead-light">
-            <tr>
-                <th scope="col" class="w-25"></th>
-                @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
-                {
-                    <th>
-                        @option.Name
-                        @if (Model.Decision.ChosenOption == option.Id)
-                        {
-                            <span class="badge bg-success badge-pill">✓</span>
-                        }
-                    </th>
-                }
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var criteria in Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>())
-            {
-                <tr>
-                    <th scope="row">@criteria.Description</th>
-                    @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
-                    {
-                        var comparison = Model.Decision.Comparison![criteria.Id][option.Id];
-
-                        var className =
-                            comparison.Rating.Rank == Rank.Poor
-                                ? "background-danger"
-                                : comparison.Rating.Rank == Rank.Average
-                                    ? "bg-warning"
-                                    : "bg-success";
-                        <td>
-                            @if (comparison.Rating.Rank == Rank.Poor)
-                            {
-                                <span class="badge bg-danger badge-pill">✗</span>
-                            }
-                            else if (comparison.Rating.Rank == Rank.Average)
-                            {
-                                <span class="badge bg-warning badge-pill">﹣</span>
-                            }
-                            else if (comparison.Rating.Rank == Rank.Unknown)
-                            {
-                                <span class="badge bg-info badge-pill">?</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-success badge-pill">✓</span>
-                            }
-                            @comparison.Rating.Commentary
-                        </td>
-                    }
-                </tr>
-            }
-            </tbody>
-        </table>
+        <h5>Primary Criteria</h5>
+        @await Html.PartialAsync("ComparisonView", new Tuple<Decision, bool>(Model.Decision, true))
+        <hr/>
+        <h5>Supplementary Criteria</h5>
+        @await Html.PartialAsync("ComparisonView", new Tuple<Decision, bool>(Model.Decision, false))
     </div>
 
     <div class="text-left">

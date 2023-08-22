@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
+        <PackageReference Include="Markdig" Version="0.32.0" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.9" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.9" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.ViewCompilation" Version="2.2.0" />
@@ -19,10 +20,72 @@
       <_ContentIncludedByDefault Remove="Views\Shared\Error.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Shared\_Layout.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Shared\_ValidationScriptsPartial.cshtml" />
+      <_ContentIncludedByDefault Remove="wwwroot\wwwroot\index.html" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\ArchitectureDecisionsCore\ArchitectureDecisionsCore.csproj" />
     </ItemGroup>
 
+
+    <ItemGroup>
+      <Content Update="Scripts\components\chosenOption.tsx">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="Scripts\components\criteria.tsx">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="Scripts\components\errorBoundary.tsx">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="Scripts\components\matrix.tsx">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="Scripts\components\options.tsx">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="Scripts\components\stakeholders.tsx">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="Scripts\components\decision.jsx">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <DependentUpon>decision.tsx</DependentUpon>
+      </Content>
+      <Content Update="Scripts\components\decision.jsx">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="vite.config.js">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <TypeScriptCompile Remove="wwwroot\js\components\model.ts" />
+      <TypeScriptCompile Remove="wwwroot\js\components\chosenOption.tsx" />
+      <TypeScriptCompile Remove="wwwroot\js\components\criteria.tsx" />
+      <TypeScriptCompile Remove="wwwroot\js\components\decision.tsx" />
+      <TypeScriptCompile Remove="wwwroot\js\components\errorBoundary.tsx" />
+      <TypeScriptCompile Remove="wwwroot\js\components\matrix.tsx" />
+      <TypeScriptCompile Remove="wwwroot\js\components\options.tsx" />
+      <TypeScriptCompile Remove="wwwroot\js\components\stakeholders.tsx" />
+      <TypeScriptCompile Remove="vite.config.ts" />
+      <TypeScriptCompile Remove="Scripts\src\tinymce.d.ts" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Folder Include="wwwroot\assets\" />
+    </ItemGroup>
+    
 </Project>

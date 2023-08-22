@@ -1,8 +1,18 @@
 ﻿'use strict';
 
-class Stakeholders extends React.Component {
+import {StakeholderModel} from "./model";
+import React from "react";
 
-    constructor(props) {
+export interface StakeholdersProps {
+    stakeholders: StakeholderModel[]
+    onNewStakeholder: (stakeHolder: StakeholderModel) => void
+    onRemoveStakeholder: (stakeHolder: StakeholderModel) => void
+    onUpdateStakeholder: (stakeHolder: StakeholderModel) => void
+}
+
+export class Stakeholders extends React.Component<StakeholdersProps> {
+
+    constructor(props: StakeholdersProps) {
         super(props);
     }
 

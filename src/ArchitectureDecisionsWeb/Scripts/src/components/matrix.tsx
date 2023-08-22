@@ -1,8 +1,19 @@
 ﻿'use strict';
 
-class Matrix extends React.Component {
+import {ComparisonModel, CriteriaModel, OptionModel} from "./model";
+import React from "react";
+import * as ReactBootstrap from "react-bootstrap"
 
-    constructor(props) {
+export interface MatrixProps {
+    options: OptionModel[]
+    criteria: CriteriaModel[]
+    onUpdateMatrix: (criteriaId: number, optionId: number, val: { Commentary: string, Rank: number }) => void
+    comparisons: ComparisonModel[][]
+}
+
+export class Matrix extends React.Component<MatrixProps> {
+
+    constructor(props: MatrixProps) {
         super(props);
     }
 
@@ -28,10 +39,10 @@ class Matrix extends React.Component {
                                 comparison = option[x.Id]
                             }
                             const key = `${criteria.Id}-${x.Id}`
-                            const commentaryRef = React.createRef();
-                            const rankRef = React.createRef();
+                            const commentaryRef = React.createRef<HTMLTextAreaElement>();
+                            const rankRef = React.createRef<HTMLSelectElement>();
 
-                            function backgroundStyle(rank) {
+                            function backgroundStyle(rank: number) {
                                 switch (rank) {
                                     case 0 :
                                         return 'bg-danger';
@@ -53,8 +64,8 @@ class Matrix extends React.Component {
 
                                             onChange={_ => {
                                                 this.props.onUpdateMatrix(criteria.Id, x.Id, {
-                                                    Commentary: commentaryRef.current.value,
-                                                    Rank: parseInt(rankRef.current.value, 10)
+                                                    Commentary: commentaryRef.current!.value,
+                                                    Rank: parseInt(rankRef.current!.value, 10)
                                                 });
 
                                             }}>
@@ -73,8 +84,8 @@ class Matrix extends React.Component {
                                                   ref={commentaryRef}
                                                   onChange={_ => {
                                                       this.props.onUpdateMatrix(criteria.Id, x.Id, {
-                                                          Commentary: commentaryRef.current.value,
-                                                          Rank: parseInt(rankRef.current.value, 10)
+                                                          Commentary: commentaryRef.current!.value,
+                                                          Rank: parseInt(rankRef.current!.value, 10)
                                                       });
                                                   }}/>
                                     </div>

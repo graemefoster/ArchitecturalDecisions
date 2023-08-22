@@ -17,17 +17,6 @@
 
         <input name="id" type="hidden" value="@Model.Decision.Id">
 
-        <div class="form-group">
-            <label for="displayName">Display Name</label>
-            <input id="displayName" name="displayName" type="text" class="form-control" value="@Model.Decision.DisplayName" placeholder="Decision Display Name">
-        </div>
-
-        <div class="form-group">
-            <label for="problemStatementEditor">Problem Statement </label>
-            <textarea id="problemStatementEditor" name="problemStatement">@Model.Decision.ProblemStatement</textarea>
-        </div>
-
-
         <div id="decision_container"></div>
 
         <hr/>
@@ -41,76 +30,42 @@
 
 @section Scripts
 {
-    <script src="https://cdn.tiny.cloud/1/ooj8w0elph7lqxg57hs9zqsmqzztc6fku86941ux6abhf1lm/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js" crossorigin></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-tinymce/0.7.0/react-tinymce.min.js" integrity="sha512-HCWozbUS7mP9HFfK3o71A/apR/KiIcDmjnFQMiCwRLyQTKBmRtR0Op1/pv1nVfoNp6Z+BU/YAzTiictA1qSDFw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="~/js/components/errorBoundary.js" type="text/babel"></script>
-    <script src="~/js/components/criteria.js" type="text/babel"></script>
-    <script src="~/js/components/options.js" type="text/babel"></script>
-    <script src="~/js/components/matrix.js" type="text/babel"></script>
-    <script src="~/js/components/chosenOption.js" type="text/babel"></script>
-    <script src="~/js/components/stakeholders.js" type="text/babel"></script>
-    <script src="~/js/components/decision.js" type="text/babel"></script>
+    <script type="text/javascript">
+    window.decision = @Html.Raw(JsonConvert.SerializeObject(Model.Decision));
+    </script>
+
+    <script src="~/assets/index.js"></script>
 
     <script>
-
-    $.ajaxSetup({
-      contentType: "application/json; charset=utf-8"
-    });
-
-    tinymce.init({
-        selector: 'textarea#businessRequirementsEditor',
-        menubar: false
-    });
-
-    tinymce.init({
-        selector: 'textarea#problemStatementEditor',
-        menubar: false
-    });
-    
-    window.decision = @Html.Raw(JsonConvert.SerializeObject(Model.Decision));
 
     function updateDecision(decision) {
         window.decision = decision;
     }
         
-    $('#saveDecisionForm').submit(function () {
+    document.getElementById('saveDecisionForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
 
-        
-        try {
-            decision.displayName = document.getElementById('displayName').value;
-            decision.problemStatement = tinymce.get('problemStatementEditor').getContent();
-            decision.happySave = null;
-    
-            //document.getElementById('saveButton').disabled = true;
-            $.post(
-                '@Url.Action("Execute", "SaveDecisionApi", new { id = Model.Decision.Id })', 
-                JSON.stringify(window.decision),
-                function (data, status, xhr) {
-                    document.getElementById('saveButton').disabled = false;
-                    let btnClass = status === 'success' ? 'btn-success' : 'btn-danger';
-                    document.getElementById('saveButton').className = `btn ${btnClass}`;
-                    window.setTimeout(function () {
-                        document.getElementById('saveButton').className = 'btn btn-primary';
-                    }, 2000);
-                },
-                'json');
-            
-        } catch (e) {
-            console.log(e);
-        } finally {
-            return false;
-        }
+        window.decision.happySave = null;
 
+        //document.getElementById('saveButton').disabled = true;
+        fetch(
+            '@Url.Action("Execute", "SaveDecisionApi", new { id = Model.Decision.Id })',
+            {
+                method: 'POST',
+                body: JSON.stringify(window.decision),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(r => {
+                document.getElementById('saveButton').disabled = false;
+                let btnClass = r.status === 200 ? 'btn-success' : 'btn-danger';
+                document.getElementById('saveButton').className = `btn ${btnClass}`;
+                window.setTimeout(function () {
+                    document.getElementById('saveButton').className = 'btn btn-primary';
+                }, 2000);
+            });
     });
-    </script>
-
-    <script type="text/babel">
-        const domContainer = document.querySelector('#decision_container');
-        ReactDOM.render(<ErrorBoundary><Decision decision={decision} onUpdate={x => updateDecision(x)} /></ErrorBoundary>, domContainer);
     </script>
 
 }

@@ -1,0 +1,52 @@
+﻿@using ArchitectureDecisionsCore
+@model Tuple<Decision, bool>   
+
+<table class="table table-bordered">
+    <thead class="thead-light">
+    <tr>
+        <th scope="col" class="w-25">Ordered by importance</th>
+        @foreach (var option in Model.Item1.Options ?? Enumerable.Empty<Option>())
+        {
+            <th>
+                @option.Name
+                @if (Model.Item1.ChosenOption == option.Id)
+                {
+                    <span class="badge bg-success badge-pill">✓</span>
+                }
+            </th>
+        }
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var criteria in (Model.Item1.SolutionCriteria ?? Enumerable.Empty<Criteria>()).Where(x => x.IsPrimary == Model.Item2).OrderBy(x => x.Index))
+    {
+        <tr>
+            <th scope="row">@criteria.Description</th>
+            @foreach (var option in Model.Item1.Options ?? Enumerable.Empty<Option>())
+            {
+                var comparison = Model.Item1.Comparison![criteria.Id][option.Id];
+
+                <td>
+                    @if (comparison.Rating.Rank == Rank.Poor)
+                    {
+                        <span class="badge bg-danger badge-pill">✗</span>
+                    }
+                    else if (comparison.Rating.Rank == Rank.Average)
+                    {
+                        <span class="badge bg-warning badge-pill">﹣</span>
+                    }
+                    else if (comparison.Rating.Rank == Rank.Unknown)
+                    {
+                        <span class="badge bg-info badge-pill">?</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success badge-pill">✓</span>
+                    }
+                    @comparison.Rating.Commentary
+                </td>
+            }
+        </tr>
+    }
+    </tbody>
+</table>

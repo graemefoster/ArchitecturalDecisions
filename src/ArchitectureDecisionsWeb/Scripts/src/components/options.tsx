@@ -1,8 +1,19 @@
 ﻿'use strict';
 
-class Options extends React.Component {
+import {OptionModel, tinyApiKey} from "./model";
+import React from "react";
+import {Editor } from '@tinymce/tinymce-react'
 
-    constructor(props) {
+export interface OptionsProps {
+    options: OptionModel[]
+    onNewOption: (option: OptionModel) => void
+    onUpdateOption: (option: OptionModel) => void
+    onRemoveOption: (option: OptionModel) => void
+}
+
+export class Options extends React.Component<OptionsProps> {
+
+    constructor(props: OptionsProps) {
         super(props);
     }
 
@@ -10,7 +21,7 @@ class Options extends React.Component {
 
         const button = <button type="button" className={'btn btn-block btn-primary  '} onClick={() => {
             const newId = this.props.options.length === 0 ? 0 : Math.max(...this.props.options.map(x => x.Id)) + 1;
-            this.props.onNewOption({Id: newId, Description: '?'});
+            this.props.onNewOption({Id: newId, Name: "?", Description: '?', Diagram: ''});
         }}>New Option</button>
 
         if (this.props.options.length === 0) {
@@ -40,25 +51,16 @@ class Options extends React.Component {
                 <div className={'form-row'}>
                     <div className={'col-8'}>
                         <label>Description</label>
-                        <ReactTinymce 
-                            content={x.Description || ''}
-                            config={{ menubar: false }}
-                            onChange={evt => {
-                                x.Description = evt.target.getContent()
+                        <Editor 
+                            value={x.Description || ''}
+                            apiKey={tinyApiKey}
+                            init={{ menubar: false }}
+                            onEditorChange={evt => {
+                                x.Description = evt
                                 this.props.onUpdateOption(x);
                             }}/>
                     </div>
                     <div className={'col-4'}>
-                        {/*<div className={'row'}>*/}
-                        {/*    <ul className={'list-inline'}>*/}
-                        {/*        <li>*/}
-                        {/*            <button type={'button'} className={'btn btn-primary'}>HTML <b>Not filtered</b></button>*/}
-                        {/*        </li>*/}
-                        {/*        <li>*/}
-                        {/*            <button type={'button'} className={'btn btn-primary'}>Preview</button>*/}
-                        {/*        </li>*/}
-                        {/*    </ul>*/}
-                        {/*</div>*/}
                         <label>HTML <b>Not filtered on print view</b></label>
                         <textarea rows={7} className={'form-control'} value={x.Diagram || ''} onChange={evt => {
                             x.Diagram = evt.target.value || ''
