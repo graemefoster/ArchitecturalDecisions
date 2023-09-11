@@ -89,7 +89,8 @@
     </ItemGroup>
     
     <Target Name="BuildReactPage" BeforeTargets="Build">
-      <Exec Command="vite build ./scripts" />
+        <Exec Command="./scripts/node_modules/.bin/tsc -p ./scripts" />
+        <Exec Command="./scripts/node_modules/.bin/vite build ./scripts" />
     </Target>   
     
 </Project>

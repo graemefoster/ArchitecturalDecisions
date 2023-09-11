@@ -12,7 +12,7 @@ export class ErrorBoundary extends React.Component<PropsWithChildren, ErrorBound
         this.state = { hasError: false };
     }
 
-    static getDerivedStateFromError(error: any) {
+    static getDerivedStateFromError(_: any) {
         return { hasError: true };
     }
 
@@ -24,7 +24,7 @@ export class ErrorBoundary extends React.Component<PropsWithChildren, ErrorBound
     render() {
         if (this.state.hasError) {
             // You can render any custom fallback UI
-            return <h1>Well this is embarassing. Something's gone wrong :(</h1>;
+            return <h1>Well this is embarrassing. Something's gone wrong :(</h1>;
         }
 
         return this.props.children;

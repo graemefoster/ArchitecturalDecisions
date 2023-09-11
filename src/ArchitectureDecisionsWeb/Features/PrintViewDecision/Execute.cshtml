@@ -4,14 +4,14 @@
     ViewData["Title"] = Model.Decision.DisplayName;
     Layout = "";
 }
-<html>
+<html lang="en">
 <head>
     <title>@Model.Decision.DisplayName</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css"/>
 </head>
 <body>
-<div class="container-lg">
+<div class="container">
 
     <div class="text-left">
         <h1>@Html.Raw(Model.Decision.DisplayName)</h1>
@@ -31,81 +31,92 @@
         <dl class="row">
             @foreach (var criteria in (Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>()).Where(x => x.IsPrimary))
             {
-                <dt class="col-sm-3">@criteria.Description</dt>
-                <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition))</dd>
+                <dt class="col-sm-3" id="@("criteria-" + criteria.Id)">@criteria.Description</dt>
+                <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition ?? string.Empty))</dd>
             }
         </dl>
-        <hr />
-        <h5>Secondary Criteria</h5>
-        <dl class="row" style="font-size: smaller">
-            @foreach (var criteria in (Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>()).Where(x => !x.IsPrimary))
-            {
-                <dt class="col-sm-3">@criteria.Description</dt>
-                <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition))</dd>
-            }
-        </dl>
-    </div>
-    <hr/>
-    <div class="text-left">
-        <h2>Options</h2>
-        @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
+        <hr/>
+        @if ((Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>()).Any(x => !x.IsPrimary))
         {
-            <h3 class="mb-1">
-                @if (Model.Decision.ChosenOption == option.Id)
+            <h5>Secondary Criteria</h5>
+            <dl style="font-size: smaller" class="row">
+                @foreach (var criteria in (Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>()).Where(x => !x.IsPrimary))
                 {
-                    <span class="badge bg-success badge-pill">✓</span>
+                    <dt class="col-sm-3" id="@("criteria-" + criteria.Id)">@criteria.Description</dt>
+                    <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition ?? string.Empty))</dd>
                 }
-                @option.Name
-            </h3>
-            <div class="row">
-                <div class="col-4">
-                    @Html.Raw(Markdig.Markdown.ToHtml(option.Description))
-                </div>
-                <div class="col-8">
-                    @Html.Raw(option.Diagram)
-                </div>
-            </div>
-            <hr/>
+            </dl>
         }
     </div>
     <hr/>
     <div class="text-left">
         <h4>Primary Criteria Comparison</h4>
         @await Html.PartialAsync("ComparisonView", new Tuple<Decision, bool>(Model.Decision, true))
-        <hr/>
-        <h5>Supplementary Criteria Comparison</h5>
-        <div style="font-size: 0.5em">
-            @await Html.PartialAsync("ComparisonView", new Tuple<Decision, bool>(Model.Decision, false))
-        </div>
+        @if ((Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>()).Any(x => !x.IsPrimary))
+        {
+            <hr/>
+            <h5>Supplementary Criteria Comparison</h5>
+            <div style="font-size: 0.5em">
+                @await Html.PartialAsync("ComparisonView", new Tuple<Decision, bool>(Model.Decision, false))
+            </div>
+        }
     </div>
-
+    <hr/>
     <div class="text-left">
-        <h4>Stakeholders</h4>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="row">Name</th>
-                <th scope="row">Role</th>
-                <th scope="row">Socialised</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            @foreach (var stakeholder in Model.Decision.Stakeholders ?? Enumerable.Empty<Stakeholder>())
-            {
-                <tr>
-                    <th scope="row">@stakeholder.Name</th>
-                    <td>@stakeholder.Role</td>
-                    <td>
-                        @if (stakeholder.Socialised)
-                        {
-                            <span class="badge bg-success badge-pill">✓</span>
-                        }
-                    </td>
-                </tr>
-            }
-        </table>
+        <div>
+            <h2>Options</h2>
+        </div>
+        @foreach (var option in Model.Decision.Options ?? Enumerable.Empty<Option>())
+        {
+            <div id="option-@(option.Id)">
+                <h3 class="mb-1">
+                    @if (Model.Decision.ChosenOption == option.Id)
+                    {
+                        <span class="badge bg-success badge-pill">✓</span>
+                    }
+                    @option.Name
+                </h3>
+            </div>
+            <div>
+                @Html.Raw(Markdig.Markdown.ToHtml(option.Description ?? string.Empty))
+            </div>
+            <div>
+                @Html.Raw(option.Diagram)
+            </div>
+            <hr/>
+        }
     </div>
+
+    @if ((Model.Decision.Stakeholders ?? Enumerable.Empty<Stakeholder>()).Any())
+    {
+        <div class="text-left">
+            <h4>Stakeholders</h4>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="row">Name</th>
+                    <th scope="row">Role</th>
+                    <th scope="row">Socialised</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                @foreach (var stakeholder in Model.Decision.Stakeholders ?? Enumerable.Empty<Stakeholder>())
+                {
+                    <tr>
+                        <th scope="row">@stakeholder.Name</th>
+                        <td>@stakeholder.Role</td>
+                        <td>
+                            @if (stakeholder.Socialised)
+                            {
+                                <span class="badge bg-success badge-pill">✓</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
 </div>
 </body>
 </html>

@@ -8,7 +8,7 @@
         @foreach (var option in Model.Item1.Options ?? Enumerable.Empty<Option>())
         {
             <th>
-                @option.Name
+                <a href="@("#option-" + option.Id)">@option.Name</a>
                 @if (Model.Item1.ChosenOption == option.Id)
                 {
                     <span class="badge bg-success badge-pill">✓</span>
@@ -21,7 +21,7 @@
     @foreach (var criteria in (Model.Item1.SolutionCriteria ?? Enumerable.Empty<Criteria>()).Where(x => x.IsPrimary == Model.Item2).OrderBy(x => x.Index))
     {
         <tr>
-            <th scope="row">@criteria.Description</th>
+            <th scope="row"><a href="@("#criteria-" + criteria.Id)">@criteria.Description</a></th>
             @foreach (var option in Model.Item1.Options ?? Enumerable.Empty<Option>())
             {
                 var comparison = Model.Item1.Comparison![criteria.Id][option.Id];
@@ -39,7 +39,7 @@
                     {
                         <span class="badge bg-info badge-pill">?</span>
                     }
-                    else
+                    else if (comparison.Rating.Rank == Rank.Good)
                     {
                         <span class="badge bg-success badge-pill">✓</span>
                     }

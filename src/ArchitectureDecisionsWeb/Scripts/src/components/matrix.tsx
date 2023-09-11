@@ -50,6 +50,7 @@ export class Matrix extends React.Component<MatrixProps> {
                                     case 1 :
                                         return 'bg-warning';
                                     case 3 :
+                                    case 4 :
                                         return '';
                                     default:
                                         return 'bg-success';
@@ -74,6 +75,7 @@ export class Matrix extends React.Component<MatrixProps> {
                                             <option value="1">Average</option>
                                             <option value="2">Good</option>
                                             <option value="3">Unknown</option>
+                                            <option value="4">Not Rated</option>
                                         </ReactBootstrap.Form.Select>
                                     </div>
                                 </div>

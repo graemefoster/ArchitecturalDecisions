@@ -4,14 +4,17 @@ import * as React from "react";
 import * as ReactBootstrap from "react-bootstrap";
 import {Criteria} from "./criteria";
 import {ChosenOption} from "./chosenOption";
-import {ComparisonModel, CriteriaModel, DecisionModel, RatingModel, WithId} from "./model";
+import { CriteriaModel, DecisionModel, RatingModel, WithId} from "./model";
 import {Stakeholders} from "./stakeholders";
 import {Options} from "./options";
 import {Matrix} from "./matrix";
+import * as marked from "marked";
+import DOMPurify from "dompurify";
+import {Tab, Tabs} from "react-bootstrap";
 
 interface DecisionState {
-    decision: DecisionModel;
-    undoBuffer: DecisionModel[];
+    decision: DecisionModel
+    undoBuffer: DecisionModel[]
 }
 
 interface DecisionProps {
@@ -23,7 +26,7 @@ export class Decision extends React.Component<DecisionProps, DecisionState> {
 
     constructor(props: DecisionProps) {
         super(props);
-        this.state = {decision: props.decision, undoBuffer: []};
+        this.state = {decision: props.decision, undoBuffer: [] };
         this.updateClone = this.updateClone.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
         this.cloneDecision = this.cloneDecision.bind(this);
@@ -123,7 +126,6 @@ export class Decision extends React.Component<DecisionProps, DecisionState> {
     }
 
     render() {
-
         const clonedDecision = JSON.parse(JSON.stringify(this.state.decision)) as DecisionModel
         clonedDecision.SolutionCriteria.sort(x => x.Index);
 
@@ -142,10 +144,18 @@ export class Decision extends React.Component<DecisionProps, DecisionState> {
                 </div>
 
                 <div className="form-group">
+                    
                     <label htmlFor="problemStatementEditor"
                            style={{'verticalAlign': 'top'}}>
                         Problem Statement
                     </label>
+
+                    <Tabs
+                        defaultActiveKey="Edit"
+                        className="mb-3"
+                    >
+                        <Tab eventKey='Edit' title='Edit'>
+
                     <textarea
                         value={this.state.decision.ProblemStatement}
                         id={'problemStatementEditor'}
@@ -155,7 +165,11 @@ export class Decision extends React.Component<DecisionProps, DecisionState> {
                         onChange={evt => {
                             this.updateClone(x => x.ProblemStatement = evt.target.value)
                         }}
-                    />
+                    /></Tab>
+                        <Tab eventKey='Preview' title='Preview'>
+                            <div style={{height:"150px",overflow:"scroll"}} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked.parse(this.state.decision.ProblemStatement)) }}></div>
+                        </Tab>
+                    </Tabs>
                 </div>
 
                 <hr/>

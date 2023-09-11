@@ -1,8 +1,10 @@
 ﻿'use strict';
 
 import React from "react";
-import {FormCheck, FormLabel} from 'react-bootstrap'
-import {CriteriaModel} from "./model";
+import {FormCheck, FormLabel, Tab, Tabs} from 'react-bootstrap'
+import {CriteriaModel} from "./model"
+import * as marked from "marked"
+import DOMPurify from "dompurify"
 
 export interface CriteriaProps {
     criteria: CriteriaModel[]
@@ -23,7 +25,13 @@ export class Criteria extends React.Component<CriteriaProps> {
 
         const button = <button type="button" className={'btn btn-block btn-primary'} onClick={() => {
             const newId = this.props.criteria.length === 0 ? 0 : Math.max(...this.props.criteria.map(x => x.Id)) + 1;
-            this.props.onNewCriteria({Id: newId, Description: '?', Definition: '?', Index: this.props.criteria.length, IsPrimary: true});
+            this.props.onNewCriteria({
+                Id: newId,
+                Description: '?',
+                Definition: '?',
+                Index: this.props.criteria.length,
+                IsPrimary: true
+            });
         }}>New Criteria</button>
 
         if (this.props.criteria.length === 0) {
@@ -62,10 +70,10 @@ export class Criteria extends React.Component<CriteriaProps> {
                         <FormLabel>Is Primary</FormLabel>
                     </div>
                     <div className={'col-1'}>
-                    <FormCheck checked={x.IsPrimary} onChange={event => {
-                        x.IsPrimary = !x.IsPrimary;
-                        this.props.onUpdateCriteria(x);
-                    }}></FormCheck>
+                        <FormCheck checked={x.IsPrimary} onChange={_ => {
+                            x.IsPrimary = !x.IsPrimary;
+                            this.props.onUpdateCriteria(x);
+                        }}></FormCheck>
                     </div>
                 </div>
                 <div className={'form-row'}>
@@ -80,15 +88,27 @@ export class Criteria extends React.Component<CriteriaProps> {
                         Definition
                     </label>
                     <div className={'col'}>
-                        <textarea
-                            value={ x.Definition || ''}
-                            className={'form-control'}
-                            rows={7}
-                            cols={100}
-                            onChange={evt => {
-                                x.Definition = evt.target.value
-                                this.props.onUpdateCriteria(x);
-                            }}/>
+
+                        <Tabs
+                            defaultActiveKey="Edit"
+                            className="mb-3">
+                            <Tab eventKey='Edit' title='Edit'>
+                                <textarea
+                                    value={x.Definition || ''}
+                                    id={'problemStatementEditor'}
+                                    className={'form-control'}
+                                    rows={7}
+                                    cols={100}
+                                    onChange={evt => {
+                                        x.Definition = evt.target.value
+                                        this.props.onUpdateCriteria(x);
+                                    }}/>
+                            </Tab>
+                            <Tab eventKey='Preview' title='Preview'>
+                                <div style={{height: "150px", overflow: "scroll"}}
+                                     dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked.parse(x.Definition))}}></div>
+                            </Tab>
+                        </Tabs>
                     </div>
                 </div>
             </li>));

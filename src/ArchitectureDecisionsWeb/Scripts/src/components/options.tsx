@@ -2,7 +2,9 @@
 
 import {OptionModel} from "./model";
 import React from "react";
-import {  } from "react-bootstrap"
+import {Tab, Tabs} from "react-bootstrap"
+import * as marked from "marked"
+import DOMPurify from "dompurify"
 
 export interface OptionsProps {
     options: OptionModel[]
@@ -54,15 +56,26 @@ export class Options extends React.Component<OptionsProps> {
                             style={{'verticalAlign': 'top'}}>
                             Description
                         </label>
-                        <textarea 
-                            value={x.Description || ''}
-                            className={'form-control'}
-                            rows={8}
-                            cols={50}
-                            onChange={evt => {
-                                x.Description = evt.target.value
-                                this.props.onUpdateOption(x);
-                            }}/>
+                        <Tabs
+                            defaultActiveKey="Edit"
+                            className="mb-3">
+                            <Tab eventKey='Edit' title='Edit'>
+                                <textarea
+                                    value={x.Description || ''}
+                                    id={'problemStatementEditor'}
+                                    className={'form-control'}
+                                    rows={7}
+                                    cols={100}
+                                    onChange={evt => {
+                                        x.Description = evt.target.value
+                                        this.props.onUpdateOption(x);
+                                    }}/>
+                            </Tab>
+                            <Tab eventKey='Preview' title='Preview'>
+                                <div style={{height: "150px", overflow: "scroll"}}
+                                     dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked.parse(x.Description))}}></div>
+                            </Tab>
+                        </Tabs>
                     </div>
                     <div className={'col-4'}>
                         <label>HTML <b>Not filtered on print view</b></label>
