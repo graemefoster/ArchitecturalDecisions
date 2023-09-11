@@ -106,7 +106,7 @@ export class Criteria extends React.Component<CriteriaProps> {
                             </Tab>
                             <Tab eventKey='Preview' title='Preview'>
                                 <div style={{height: "150px", overflow: "scroll"}}
-                                     dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked.parse(x.Definition))}}></div>
+                                     dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked.parse(x.Definition ?? ""))}}></div>
                             </Tab>
                         </Tabs>
                     </div>

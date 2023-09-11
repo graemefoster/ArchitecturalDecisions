@@ -4,15 +4,15 @@
 <table class="table table-bordered">
     <thead class="thead-light">
     <tr>
-        <th scope="col" class="w-25">Ordered by importance</th>
+        <th style="vertical-align: top" scope="col" class="w-25">Ordered by importance</th>
         @foreach (var option in Model.Item1.Options ?? Enumerable.Empty<Option>())
         {
-            <th>
-                <a href="@("#option-" + option.Id)">@option.Name</a>
+            <th style="vertical-align: top" >
                 @if (Model.Item1.ChosenOption == option.Id)
                 {
                     <span class="badge bg-success badge-pill">✓</span>
                 }
+                <a href="@("#option-" + option.Id)">@option.Name</a>
             </th>
         }
     </tr>

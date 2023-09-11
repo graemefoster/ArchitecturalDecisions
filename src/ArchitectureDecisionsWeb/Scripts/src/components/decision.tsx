@@ -167,7 +167,7 @@ export class Decision extends React.Component<DecisionProps, DecisionState> {
                         }}
                     /></Tab>
                         <Tab eventKey='Preview' title='Preview'>
-                            <div style={{height:"150px",overflow:"scroll"}} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked.parse(this.state.decision.ProblemStatement)) }}></div>
+                            <div style={{height:"150px",overflow:"scroll"}} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked.parse(this.state.decision.ProblemStatement ?? "")) }}></div>
                         </Tab>
                     </Tabs>
                 </div>
