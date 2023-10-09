@@ -143,5 +143,14 @@ namespace ArchitectureDecisionsCore
             File.Delete(path);
             return Task.CompletedTask;
         }
+
+        public async Task Duplicate(Guid decisionId)
+        {
+            var decision = await FetchDecision(Path.Combine(_directory, decisionId + ".json"));
+            var newId = Guid.NewGuid();
+            decision.Id = newId;
+            decision.DisplayName = $"Copy of {decision.DisplayName}";
+            await Save(decision);
+        }
     }
 }

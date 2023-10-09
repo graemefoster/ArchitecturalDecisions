@@ -11,5 +11,6 @@ namespace ArchitectureDecisionsCore
         Task<Decision> Save(Decision decision);
         Task<Decision> Get(Guid decisionId);
         Task Delete(Guid decisionId);
+        Task Duplicate(Guid decisionId);
     }
 }

@@ -1,5 +1,8 @@
 ﻿@using ArchitectureDecisionsCore
+@using Markdig
+@using Markdig.Extensions.Tables
 @model ArchitectureDecisionsWeb.Features.PrintViewDecision.ViewModel;
+@inject MarkdownPipeline pipeline;
 @{
     ViewData["Title"] = Model.Decision.DisplayName;
     Layout = "";
@@ -19,7 +22,7 @@
 
     <div class="text-left">
         <h2>Problem Statement</h2>
-        @Html.Raw(Markdig.Markdown.ToHtml(Model.Decision.ProblemStatement))
+        @Html.Raw(Markdown.ToHtml(Model.Decision.ProblemStatement, pipeline))
     </div>
     <hr/>
     <div class="text-left">
@@ -32,7 +35,7 @@
             @foreach (var criteria in (Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>()).Where(x => x.IsPrimary))
             {
                 <dt class="col-sm-3" id="@("criteria-" + criteria.Id)">@criteria.Description</dt>
-                <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition ?? string.Empty))</dd>
+                <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition ?? string.Empty, pipeline))</dd>
             }
         </dl>
         <hr/>
@@ -43,7 +46,7 @@
                 @foreach (var criteria in (Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>()).Where(x => !x.IsPrimary))
                 {
                     <dt class="col-sm-3" id="@("criteria-" + criteria.Id)">@criteria.Description</dt>
-                    <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition ?? string.Empty))</dd>
+                    <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition ?? string.Empty, pipeline))</dd>
                 }
             </dl>
         }
@@ -78,7 +81,7 @@
                 </h3>
             </div>
             <div>
-                @Html.Raw(Markdig.Markdown.ToHtml(option.Description ?? string.Empty))
+                @Html.Raw(Markdown.ToHtml(option.Description ?? string.Empty, pipeline))
             </div>
             <div>
                 @Html.Raw(option.Diagram)

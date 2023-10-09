@@ -1,5 +1,6 @@
 using ArchitectureDecisionsCore;
 using JetBrains.Annotations;
+using Markdig;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -43,6 +44,8 @@ namespace ArchitectureDecisionsWeb
 
             services.AddSingleton<IDecisionRepository, IDecisionRepository>(sp =>
                 new DecisionRepository(sp.GetRequiredService<IOptions<Settings>>().Value.StoragePath));
+
+            services.AddSingleton(new MarkdownPipelineBuilder().UseAdvancedExtensions().Build());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

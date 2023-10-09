@@ -29,7 +29,7 @@
                 <td>
                     @if (comparison.Rating.Rank == Rank.Poor)
                     {
-                        <span class="badge bg-danger badge-pill">✗</span>
+                        <span>❌</span>
                     }
                     else if (comparison.Rating.Rank == Rank.Average)
                     {
@@ -41,7 +41,7 @@
                     }
                     else if (comparison.Rating.Rank == Rank.Good)
                     {
-                        <span class="badge bg-success badge-pill">✓</span>
+                        <span>✅</span>
                     }
                     @comparison.Rating.Commentary
                 </td>

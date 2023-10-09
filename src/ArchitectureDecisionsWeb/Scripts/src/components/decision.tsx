@@ -4,17 +4,16 @@ import * as React from "react";
 import * as ReactBootstrap from "react-bootstrap";
 import {Criteria} from "./criteria";
 import {ChosenOption} from "./chosenOption";
-import { CriteriaModel, DecisionModel, RatingModel, WithId} from "./model";
+import {CriteriaModel, DecisionModel, RatingModel, WithId} from "./model";
 import {Stakeholders} from "./stakeholders";
 import {Options} from "./options";
 import {Matrix} from "./matrix";
 import * as marked from "marked";
 import DOMPurify from "dompurify";
-import {Tab, Tabs} from "react-bootstrap";
+import {Col, Row } from "react-bootstrap";
 
 interface DecisionState {
     decision: DecisionModel
-    undoBuffer: DecisionModel[]
 }
 
 interface DecisionProps {
@@ -26,7 +25,7 @@ export class Decision extends React.Component<DecisionProps, DecisionState> {
 
     constructor(props: DecisionProps) {
         super(props);
-        this.state = {decision: props.decision, undoBuffer: [] };
+        this.state = {decision: props.decision};
         this.updateClone = this.updateClone.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
         this.cloneDecision = this.cloneDecision.bind(this);
@@ -65,9 +64,7 @@ export class Decision extends React.Component<DecisionProps, DecisionState> {
 
     onUpdate(decision: DecisionModel) {
         this.sanitiseDecision(decision)
-        let undoBuffer = this.state.undoBuffer
-        undoBuffer.push(this.state.decision)
-        this.setState({decision: decision, undoBuffer: undoBuffer})
+        this.setState({decision: decision})
         this.props.onUpdate(decision);
     }
 
@@ -80,7 +77,10 @@ export class Decision extends React.Component<DecisionProps, DecisionState> {
                 }
                 let optionCriteria = decision.Comparison[criteria.Id][option.Id]
                 if (optionCriteria === undefined) {
-                    decision.Comparison[criteria.Id][option.Id] = {OptionId: option.Id, Rating: {Commentary: '', Rank: 1}}
+                    decision.Comparison[criteria.Id][option.Id] = {
+                        OptionId: option.Id,
+                        Rating: {Commentary: '', Rank: 1}
+                    }
                 }
             })
         })
@@ -144,32 +144,30 @@ export class Decision extends React.Component<DecisionProps, DecisionState> {
                 </div>
 
                 <div className="form-group">
-                    
+
                     <label htmlFor="problemStatementEditor"
                            style={{'verticalAlign': 'top'}}>
                         Problem Statement
                     </label>
 
-                    <Tabs
-                        defaultActiveKey="Edit"
-                        className="mb-3"
-                    >
-                        <Tab eventKey='Edit' title='Edit'>
-
+                    <Row>
+                        <Col>
                     <textarea
                         value={this.state.decision.ProblemStatement}
                         id={'problemStatementEditor'}
                         className={'form-control'}
                         rows={8}
-                        cols={100}
+                        cols={200}
                         onChange={evt => {
                             this.updateClone(x => x.ProblemStatement = evt.target.value)
                         }}
-                    /></Tab>
-                        <Tab eventKey='Preview' title='Preview'>
-                            <div style={{height:"150px",overflow:"scroll"}} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked.parse(this.state.decision.ProblemStatement ?? "")) }}></div>
-                        </Tab>
-                    </Tabs>
+                    />
+                        </Col>
+                        <Col>
+                            <div style={{height: "300px", overflow: "scroll"}}
+                                 dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(marked.parse(this.state.decision.ProblemStatement ?? ""))}}></div>
+                        </Col>
+                    </Row>
                 </div>
 
                 <hr/>
