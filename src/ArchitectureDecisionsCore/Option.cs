@@ -9,5 +9,6 @@ namespace ArchitectureDecisionsCore
         public string? Description { get; set; }
         public string? Diagram { get; set; }
         public List<ServiceCost> EstimatedServiceCosts { get; set; } = new List<ServiceCost>();
+        public string? DiagramFile { get; set; }
     }
 }

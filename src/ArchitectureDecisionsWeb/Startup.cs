@@ -1,3 +1,4 @@
+using System.IO;
 using ArchitectureDecisionsCore;
 using JetBrains.Annotations;
 using Markdig;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
@@ -65,16 +67,23 @@ namespace ArchitectureDecisionsWeb
 
             app.UseStaticFiles(new StaticFileOptions()
             {
-                ServeUnknownFileTypes = true
+                ServeUnknownFileTypes = true,
+            });
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                ServeUnknownFileTypes = true,
+                RequestPath = "/optionimages",
+                FileProvider = new PhysicalFileProvider(Path.Combine(app.ApplicationServices.GetRequiredService<IOptions<Settings>>().Value.StoragePath, "images"))
             });
 
             app.UseRouting();
 
             // app.UseAuthentication();
             // app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Execute}/{id?}");

@@ -7,6 +7,7 @@ import * as marked from "marked"
 import DOMPurify from "dompurify"
 
 export interface OptionsProps {
+    decisionId: string
     options: OptionModel[]
     onNewOption: (option: OptionModel) => void
     onUpdateOption: (option: OptionModel) => void
@@ -23,7 +24,7 @@ export class Options extends React.Component<OptionsProps> {
 
         const button = <button type="button" className={'btn btn-block btn-primary  '} onClick={() => {
             const newId = this.props.options.length === 0 ? 0 : Math.max(...this.props.options.map(x => x.Id)) + 1;
-            this.props.onNewOption({Id: newId, Name: "?", Description: '?', Diagram: ''});
+            this.props.onNewOption({Id: newId, Name: "?", Description: '?', Diagram: '', DiagramFile: null});
         }}>New Option</button>
 
         if (this.props.options.length === 0) {
@@ -78,7 +79,12 @@ export class Options extends React.Component<OptionsProps> {
                         </Tabs>
                     </div>
                     <div className={'col-4'}>
-                        <label>HTML <b>Not filtered on print view</b></label>
+                        <label>Image {x.DiagramFile == null ? '(not set)' : x.DiagramFile }</label>
+                        <form encType={'multipart/form-data'} method={'post'} action={`/savedecisiondiagram/execute/${this.props.decisionId}/${x.Id}`}>
+                            <input type={'file'} name={'imageFile'} />
+                            <button type={'submit'}>Update</button>
+                        </form>
+                        <label>Legacy HTML <b>Not filtered on print view</b></label>
                         <textarea rows={7} className={'form-control'} value={x.Diagram || ''} onChange={evt => {
                             x.Diagram = evt.target.value || ''
                             this.props.onUpdateOption(x);

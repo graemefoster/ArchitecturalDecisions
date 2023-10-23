@@ -3,6 +3,7 @@
 }
 
 export interface DecisionModel{
+    Id: string
     DisplayName: string
     ProblemStatement: string
     SolutionCriteria: CriteriaModel[]
@@ -42,4 +43,5 @@ export interface OptionModel {
     Name: string
     Description: string
     Diagram: string
+    DiagramFile: string | null
 }

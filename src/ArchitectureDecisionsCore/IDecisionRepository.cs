@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace ArchitectureDecisionsCore
@@ -12,5 +13,6 @@ namespace ArchitectureDecisionsCore
         Task<Decision> Get(Guid decisionId);
         Task Delete(Guid decisionId);
         Task Duplicate(Guid decisionId);
+        Task SetDecisionImage(string originalImageName, Stream image, Guid decisionId, int optionId);
     }
 }

@@ -27,10 +27,17 @@ namespace ArchitectureDecisionsCore
             Options ??= new List<Option>();
             Stakeholders ??= new List<Stakeholder>();
 
+            foreach (var criteria in Options)
+            {
+                criteria.Description ??= "";
+            }
+
             var index = 0;
             foreach (var criteria in SolutionCriteria.OrderBy(x => x.Index))
             {
                 criteria.Index = index++;
+                criteria.Description ??= "";
+                criteria.Definition ??= "";
                 
                 if (!Comparison.ContainsKey(criteria.Id))
                 {

@@ -192,6 +192,7 @@ export class Decision extends React.Component<DecisionProps, DecisionState> {
                     </ReactBootstrap.Tab>
                     <ReactBootstrap.Tab eventKey="options" title="Options">
                         <Options
+                            decisionId={this.state.decision.Id}
                             options={this.state.decision.Options}
                             onNewOption={x => this.updateClone(c => c.Options.push(x))}
                             onRemoveOption={x => this.removeItemById(this.cloneDecision(), x.Id, x => x.Options)}

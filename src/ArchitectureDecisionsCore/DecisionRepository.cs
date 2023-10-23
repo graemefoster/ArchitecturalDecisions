@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -30,6 +31,20 @@ namespace ArchitectureDecisionsCore
         private static async Task<Decision> FetchDecision(string file)
         {
             return JsonConvert.DeserializeObject<Decision>(await File.ReadAllTextAsync(file))!;
+        }
+
+        public async Task SetDecisionImage(string originalImageName, Stream image, Guid decisionId, int optionId)
+        {
+            var imageFileName = decisionId + "." + optionId + Path.GetExtension(originalImageName);
+            var imagePath = Path.Combine(_directory, "images", imageFileName);
+            Directory.CreateDirectory(Path.Combine(_directory, "images"));
+            if (File.Exists(imagePath)) File.Delete(imagePath);
+            var file = File.OpenWrite(imagePath);
+            await image.CopyToAsync(file);
+            var decision = await Get(decisionId);
+            var option = decision.Options!.Single(x => x.Id == optionId);
+            option.DiagramFile = imageFileName;
+            await Save(decision);
         }
 
         public Decision New()

@@ -1,8 +1,7 @@
 ﻿@using ArchitectureDecisionsCore
 @using Markdig
-@using Markdig.Extensions.Tables
 @model ArchitectureDecisionsWeb.Features.PrintViewDecision.ViewModel;
-@inject MarkdownPipeline pipeline;
+@inject MarkdownPipeline Pipeline;
 @{
     ViewData["Title"] = Model.Decision.DisplayName;
     Layout = "";
@@ -22,7 +21,7 @@
 
     <div class="text-left">
         <h2>Problem Statement</h2>
-        @Html.Raw(Markdown.ToHtml(Model.Decision.ProblemStatement, pipeline))
+        @Html.Raw(Markdown.ToHtml(Model.Decision.ProblemStatement, Pipeline))
     </div>
     <hr/>
     <div class="text-left">
@@ -35,7 +34,7 @@
             @foreach (var criteria in (Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>()).Where(x => x.IsPrimary))
             {
                 <dt class="col-sm-3" id="@("criteria-" + criteria.Id)">@criteria.Description</dt>
-                <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition ?? string.Empty, pipeline))</dd>
+                <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition ?? string.Empty, Pipeline))</dd>
             }
         </dl>
         <hr/>
@@ -46,7 +45,7 @@
                 @foreach (var criteria in (Model.Decision.SolutionCriteria ?? Enumerable.Empty<Criteria>()).Where(x => !x.IsPrimary))
                 {
                     <dt class="col-sm-3" id="@("criteria-" + criteria.Id)">@criteria.Description</dt>
-                    <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition ?? string.Empty, pipeline))</dd>
+                    <dd class="col-sm-9">@Html.Raw(Markdig.Markdown.ToHtml(criteria.Definition ?? string.Empty, Pipeline))</dd>
                 }
             </dl>
         }
@@ -81,10 +80,17 @@
                 </h3>
             </div>
             <div>
-                @Html.Raw(Markdown.ToHtml(option.Description ?? string.Empty, pipeline))
+                @Html.Raw(Markdown.ToHtml(option.Description ?? string.Empty, Pipeline))
             </div>
             <div>
-                @Html.Raw(option.Diagram)
+                @if (!string.IsNullOrWhiteSpace(option.DiagramFile))
+                {
+                    <img src="/optionimages/@(option.DiagramFile)" alt="Architecture Diagram"/>
+                }
+                @if (!string.IsNullOrWhiteSpace(option.Diagram))
+                {
+                    @Html.Raw(option.Diagram)
+                }
             </div>
             <hr/>
         }

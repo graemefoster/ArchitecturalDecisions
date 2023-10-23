@@ -1,4 +1,6 @@
 ﻿@using ArchitectureDecisionsCore
+@using Markdig
+@inject MarkdownPipeline Pipeline;
 @model Tuple<Decision, bool>   
 
 <table class="table table-bordered">
@@ -43,7 +45,7 @@
                     {
                         <span>✅</span>
                     }
-                    @comparison.Rating.Commentary
+                    @Html.Raw(Markdig.Markdown.ToHtml(comparison.Rating.Commentary ?? string.Empty, Pipeline))
                 </td>
             }
         </tr>

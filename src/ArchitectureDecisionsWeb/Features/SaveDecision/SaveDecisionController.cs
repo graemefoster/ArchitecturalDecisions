@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using ArchitectureDecisionsCore;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArchitectureDecisionsWeb.Features.SaveDecision
